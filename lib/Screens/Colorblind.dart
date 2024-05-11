@@ -1,10 +1,12 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyeqmother/Screens/report.dart';
 import 'package:eyeqmother/Screens/report1.dart';
 import 'package:eyeqmother/resources/app_images.dart';
 
 import '../components/page_transmission.dart';
+import '../userData.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +15,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:percent_indicator/percent_indicator.dart';
 
-late List<String> dataList = [];
-late List<String> dataList1 = [];
+import 'Home.dart';
+
 
 class ColorblindWidget extends StatefulWidget {
   final int screen;
@@ -29,6 +31,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
     with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
+  String selectedValue = '';
 
   final List<String> myList = [
     "7",
@@ -190,7 +193,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                     "assets/images/${screen + 1}.png",
                     width: MediaQuery.sizeOf(context).width * 0.98,
                     height: MediaQuery.sizeOf(context).height * 0.43,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -232,10 +235,8 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           secondButtonColortext = Color(0xFF4B39EF);
                           firstButtonColortext = Colors.white;
                           thirdButtonColortext = Color(0xFF4B39EF);
-                          dataList.add(myList[screen]);
-                          dataList1.add(myList[screen]);
-                          print(dataList);
-                          print(dataList1);
+                          selectedValue = myList[screen];
+
                         });
                         print('First button pressed ...');
                       },
@@ -271,11 +272,12 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           firstButtonColortext = Color(0xFF4B39EF);
                           secondButtonColortext = Colors.white;
                           thirdButtonColortext = Color(0xFF4B39EF);
+                          selectedValue = randomLetter3;
 
-                          dataList.add(myList[screen]);
-                          dataList1.add(randomLetter3);
-                          print(dataList);
-                          print(dataList1);
+                          // dataList.add(myList[screen]);
+                          // dataList1.add(randomLetter3);
+                          // print(dataList);
+                          // print(dataList1);
                         });
                         print('Second button pressed ...');
                       },
@@ -311,11 +313,12 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           secondButtonColortext = Color(0xFF4B39EF);
                           thirdButtonColortext = Colors.white;
                           firstButtonColortext = Color(0xFF4B39EF);
+                          selectedValue = randomLetter2;
 
-                          dataList.add(myList[screen]);
-                          dataList1.add(randomLetter3);
-                          print(dataList);
-                          print(dataList1);
+                          // dataList.add(myList[screen]);
+                          // dataList1.add(randomLetter3);
+                          // print(dataList);
+                          // print(dataList1);
                         });
                         print('Second button pressed ...');
                       },
@@ -357,15 +360,20 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                               .controller
                               .forward(from: 0.0));
                     }
-                    setState(() {
+                    setState(() async {
                       if (status == true) {
+                        dataList.add(myList[screen]);
+                        dataList1.add(selectedValue);
+                        print(dataList);
+                        print(dataList1);
                         if (screen < 10) {
                           screen++;
                           TransitionUtils.navigateWithAnimation(
                               context, ColorblindWidget(screen: screen));
                         } else {
+                          await updateColorBlindnessData(userEmail, dataList, dataList1);
                           TransitionUtils.navigateWithAnimation(context,
-                              ReportWidget(data: dataList, data1: dataList1));
+                              ReportWidget(data: dataList, data1: dataList1, chartName: 'Color Blind', ));
                         }
                       }
                     });
@@ -402,6 +410,43 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
       ),
     );
   }
+
+  Future<void> updateColorBlindnessData(String email, List<String> list1, List<String> list2) async {
+    // Reference to Firestore
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      // Query to find the user document by email
+      var querySnapshot = await firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isEmpty) {
+        print('No user found with that email');
+        return;
+      }
+
+      // Assuming email is unique and there's only one document
+      DocumentReference userDocRef = querySnapshot.docs.first.reference;
+
+      // Data to update
+      Map<String, dynamic> dataToUpdate = {
+        'Color Blindness': {
+          'list1': list1,
+          'list2': list2,
+        },
+      };
+
+      // Update the document
+      await userDocRef.update(dataToUpdate);
+      print('Color Blindness data updated successfully!');
+    } catch (e) {
+      print('Error updating Color Blindness data: $e');
+    }
+  }
+
 
   String number1_func(String option1, int random, int counter) {
     print(random);

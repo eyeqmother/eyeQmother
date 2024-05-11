@@ -11,6 +11,8 @@ import '../resources/app_images.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 
+import 'Home.dart';
+
 class FarNearWidget extends StatefulWidget {
   const FarNearWidget({super.key});
 
@@ -78,188 +80,192 @@ class _FarNearWidgetState extends State<FarNearWidget>
         backgroundColor: Colors.white,
         body: SafeArea(
           top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Align(
-                alignment: const AlignmentDirectional(0, -1),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      AppImages().eyetest,
-                      width: MediaQuery.sizeOf(context).width * 0.75,
-                      height: MediaQuery.sizeOf(context).height * 0.25,
-                      fit: BoxFit.cover,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Align(
+                  alignment: const AlignmentDirectional(0, -1),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        AppImages().eyetest,
+                        width: MediaQuery.sizeOf(context).width * 0.75,
+                        height: MediaQuery.sizeOf(context).height * 0.25,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-                child: Text(
-                  'Select the test you want to give',
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    fontSize: 14,
-                    letterSpacing: 0,
+                const Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
+                  child: Text(
+                    'Select the test you want to give',
+                    style: TextStyle(
+                      fontFamily: 'Readex Pro',
+                      fontSize: 14,
+                      letterSpacing: 0,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-// Generated code for this Image Widget...
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          TransitionUtils.navigateWithAnimation1(
-                              context, const far());
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/Far.png',
-                            width: MediaQuery.sizeOf(context).width * 0.35,
-                            height: MediaQuery.sizeOf(context).height * 0.15,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          TransitionUtils.navigateWithAnimation1(
-                              context, const near());
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/near.png',
-                            width: MediaQuery.sizeOf(context).width * 0.35,
-                            height: MediaQuery.sizeOf(context).height * 0.15,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Note:',
-                          style: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                          child: Text(
-                            ' The tests you will perform can be ',
-                            style: TextStyle(
-                              fontFamily: 'Readex Pro',
-                              fontSize: 11,
-                              letterSpacing: 0,
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+            // Generated code for this Image Widget...
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            TransitionUtils.navigateWithAnimation1(
+                                context, const far());
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              'assets/images/Far.png',
+                              width: MediaQuery.sizeOf(context).width * 0.35,
+                              height: MediaQuery.sizeOf(context).height * 0.15,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    Text(
-                      'inaccurate, consult to your doctor before you',
-                      style: TextStyle(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 11,
-                        letterSpacing: 0,
                       ),
-                    ),
-                    Text(
-                      ' take further steps',
-                      style: TextStyle(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 11,
-                        letterSpacing: 0,
+
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            TransitionUtils.navigateWithAnimation1(
+                                context, const near());
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              'assets/images/near.png',
+                              width: MediaQuery.sizeOf(context).width * 0.35,
+                              height: MediaQuery.sizeOf(context).height * 0.15,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    if (animationsMap['buttonOnActionTriggerAnimation'] !=
-                        null) {
-                      setState(() => hasButtonTriggered = true);
-
-                      SchedulerBinding.instance.addPostFrameCallback(
-                          (_) async => await animationsMap[
-                                  'buttonOnActionTriggerAnimation']!
-                              .controller
-                              .forward(from: 0.0));
-                    }
-
-                    TransitionUtils.navigateWithAnimation(
-                        context,
-                        SenellenQuizWidget(
-                          screen: 1,
-                        ));
-                  },
-                  text: 'Proceed',
-                  options: FFButtonOptions(
-                    width: MediaQuery.sizeOf(context).width * 0.75,
-                    height: 44,
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                    iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                    color: const Color(0xFF4B39EF),
-                    textStyle: const TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      color: Colors.white,
-                      fontSize: 16,
-                      letterSpacing: 0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    elevation: 3,
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
+                    ],
                   ),
-                  showLoadingIndicator: false,
-                ).animateOnActionTrigger(
-                    animationsMap['buttonOnActionTriggerAnimation']!,
-                    hasBeenTriggered: hasButtonTriggered),
-              ).animateOnPageLoad(animationsMap['buttonOnPageLoadAnimation']!),
-            ],
+                ),
+                const Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Note:',
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                            child: Text(
+                              ' The tests you will perform can be ',
+                              style: TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 11,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'inaccurate, consult to your doctor before you',
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 11,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                      Text(
+                        ' take further steps',
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 11,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 20),
+                  child: FFButtonWidget(
+                    onPressed: () async {
+                      if (animationsMap['buttonOnActionTriggerAnimation'] !=
+                          null) {
+                        setState(() => hasButtonTriggered = true);
+
+                        SchedulerBinding.instance.addPostFrameCallback(
+                            (_) async => await animationsMap[
+                                    'buttonOnActionTriggerAnimation']!
+                                .controller
+                                .forward(from: 0.0));
+                      }
+                      dataList = [];
+                      dataList1 = [];
+
+                      TransitionUtils.navigateWithAnimation(
+                          context,
+                          SenellenQuizWidget(
+                            screen: 1,
+                          ));
+                    },
+                    text: 'Proceed',
+                    options: FFButtonOptions(
+                      width: MediaQuery.sizeOf(context).width * 0.75,
+                      height: 44,
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                      iconPadding:
+                          const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                      color: const Color(0xFF4B39EF),
+                      textStyle: const TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        color: Colors.white,
+                        fontSize: 16,
+                        letterSpacing: 0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      elevation: 3,
+                      borderSide: const BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    showLoadingIndicator: false,
+                  ).animateOnActionTrigger(
+                      animationsMap['buttonOnActionTriggerAnimation']!,
+                      hasBeenTriggered: hasButtonTriggered),
+                ).animateOnPageLoad(animationsMap['buttonOnPageLoadAnimation']!),
+              ],
+            ),
           ),
         ),
       ),

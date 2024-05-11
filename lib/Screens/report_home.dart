@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyeqmother/Screens/AstigmentQuiz.dart';
 import 'package:eyeqmother/Screens/Colorblind.dart';
 import 'package:eyeqmother/Screens/Far_near.dart';
 import 'package:eyeqmother/Screens/ReportExers.dart';
+import 'package:eyeqmother/Screens/report.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 import '../components/page_transmission.dart';
 import '../resources/app_images.dart';
+import '../userData.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -116,7 +121,7 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                 padding: const EdgeInsetsDirectional.fromSTEB(5, 0, 5, 10),
                 child: Container(
                   width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height * 0.09,
+                  height: MediaQuery.sizeOf(context).height * 0.1,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
@@ -170,7 +175,7 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -215,9 +220,18 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(40),
                           ),
                           child: GestureDetector(
-                            onTap: () {
-                              // TransitionUtils.navigateWithAnimation1(
-                              //     context, const FarNearWidget());
+                            onTap: () async {
+                              print(userEmail);
+                              List<dynamic> dynamicData1;
+                              List<dynamic> dynamicData2;
+                              (dynamicData1, dynamicData2)  = await getSnellenChartData(userEmail);
+                              List<String> data1 = dynamicData1.map((e) => e.toString()).toList();
+                              List<String> data2= dynamicData2.map((e) => e.toString()).toList();
+
+                              print(dynamicData1);
+                              print(dynamicData2);
+                              TransitionUtils.navigateWithAnimation1(context,
+                                  ReportWidget(data: data1, data1: data2, chartName: 'Snellen Chart',));
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(4),
@@ -239,7 +253,7 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                 padding: const EdgeInsetsDirectional.fromSTEB(5, 0, 5, 10),
                 child: Container(
                   width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height * 0.09,
+                  height: MediaQuery.sizeOf(context).height * 0.1,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
@@ -363,7 +377,7 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                 padding: const EdgeInsetsDirectional.fromSTEB(5, 0, 5, 10),
                 child: Container(
                   width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height * 0.09,
+                  height: MediaQuery.sizeOf(context).height * 0.1,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
@@ -488,4 +502,38 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
       ),
     );
   }
+
+  Future<(List<dynamic>, List)> getSnellenChartData(String email) async {
+    List<dynamic> data1 = [];
+    List<dynamic> data2 = [];
+
+    try {
+      // Get Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Query the 'Snellen Chart' collection using the user's email
+      QuerySnapshot querySnapshot = await firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      print(querySnapshot.docs.length);
+
+      // Extract data from documents
+      querySnapshot.docs.forEach((doc) {
+
+        data1.add(doc['Snellen Chart']['list1']);
+        data2.add(doc['Snellen Chart']['list2']);
+      });
+      print(data1);
+
+      // Return the retrieved data as lists of strings
+      return (data1, data2);
+    } catch (e) {
+      print('Error retrieving Snellen Chart data: $e');
+      // Return empty lists if an error occurs
+      return ([], []);
+    }
+  }
+
 }

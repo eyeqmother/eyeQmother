@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyeqmother/Screens/Home.dart';
 import 'package:eyeqmother/Screens/login_widget.dart';
 import 'package:eyeqmother/Screens/otp.dart';
 import 'package:eyeqmother/resources/app_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:validators/validators.dart' as validator;
 import '../components/page_transmission.dart';
+import '../userData.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -28,6 +32,7 @@ class _SignupWidgetState extends State<SignupWidget>
   bool checkboxValue = true;
 
   late bool _showSpinner = true;
+  bool loading = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
 
@@ -367,21 +372,15 @@ class _SignupWidgetState extends State<SignupWidget>
                                                   ),
                                                 ),
                                                 unselectedWidgetColor:
-                                                    Colors.black,
+                                                    Colors.white,
                                               ),
                                               child: Checkbox(
                                                 value: checkboxValue ??= true,
-                                                onChanged: (newValue) async {
-                                                  setState(() => checkboxValue =
-                                                      newValue!);
+                                                onChanged: (newValue) {
+                                                  setState(() => checkboxValue = newValue!);
                                                 },
-                                                side: BorderSide(
-                                                  width: 2,
-                                                  color: Colors.black,
-                                                ),
-                                                activeColor: Colors.black,
-                                                checkColor:
-                                                    const Color(0xFF4B39EF),
+                                                activeColor: Colors.white,
+                                                checkColor: const Color(0xFF4B39EF),
                                               ),
                                             ),
                                             Text(
@@ -403,129 +402,164 @@ class _SignupWidgetState extends State<SignupWidget>
                                       ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding:
+                                  Visibility(
+                                    visible: loading,
+                                    child: Center(
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 45,
+                                        padding: EdgeInsets.all(10),
+                                        margin:
                                         const EdgeInsetsDirectional.fromSTEB(
                                             0, 35, 0, 0),
-                                    child: FFButtonWidget(
-                                      onPressed: () async {
-                                        if (animationsMap[
-                                                'buttonOnActionTriggerAnimation'] !=
-                                            null) {
-                                          setState(
-                                              () => hasButtonTriggered = true);
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                                          color: const Color(0xFF4B39EF),
+                                        ),
+                                        child: Center(child: const CircularProgressIndicator(color: Colors.white,)),
+                                      ),
+                                    ),
+                                  ),
 
-                                          SchedulerBinding.instance
-                                              .addPostFrameCallback((_) async {
-                                            await animationsMap[
-                                                    'buttonOnActionTriggerAnimation']!
-                                                .controller
-                                                .forward(from: 0.0);
-                                          });
-                                        }
-                                        if (emailAddressController.text
-                                                .trim()
-                                                .isEmpty ||
-                                            passwordController.text
-                                                .trim()
-                                                .isEmpty) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'Please fill in all fields.'),
-                                            ),
-                                          );
-                                        } else {
-                                          try {
-                                            final credential = await FirebaseAuth
-                                                .instance
-                                                .createUserWithEmailAndPassword(
-                                              email: emailAddressController.text
-                                                  .trim(),
-                                              password: passwordController.text
-                                                  .trim(),
-                                            );
+                                  Visibility(
+                                    visible: !loading,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0, 35, 0, 0),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          if (animationsMap[
+                                                  'buttonOnActionTriggerAnimation'] !=
+                                              null) {
+                                            loading=true;
+                                            setState(
+                                                () => hasButtonTriggered = true);
 
-                                            if (credential.user != null) {
-                                              print('Signup successful');
-                                              // Navigate to OTP widget or other destination
-                                              TransitionUtils
-                                                  .navigateWithAnimation(
-                                                      context,
-                                                      const HomeWidget());
-                                            }
-                                          } on FirebaseAuthException catch (e) {
-                                            String errorMessage;
-
-                                            switch (e.code) {
-                                              case 'weak-password':
-                                                errorMessage =
-                                                    'The password provided is too weak.';
-                                                break;
-                                              case 'email-already-in-use':
-                                                errorMessage =
-                                                    'The account already exists for that email.';
-                                                break;
-                                              case 'invalid-email':
-                                                errorMessage =
-                                                    'The email address is malformed.';
-                                                break;
-                                              default:
-                                                errorMessage =
-                                                    'An error occurred: ${e.message}';
-                                            }
-
-                                            print(errorMessage);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(errorMessage),
-                                              ),
-                                            );
-                                          } catch (e) {
-                                            print(
-                                                'An unexpected error occurred: $e');
+                                            SchedulerBinding.instance
+                                                .addPostFrameCallback((_) async {
+                                              await animationsMap[
+                                                      'buttonOnActionTriggerAnimation']!
+                                                  .controller
+                                                  .forward(from: 0.0);
+                                            });
+                                          }
+                                          if (emailAddressController.text
+                                                  .trim()
+                                                  .isEmpty ||
+                                              passwordController.text
+                                                  .trim()
+                                                  .isEmpty) {
+                                            loading = false;
+                                            setState(() {});
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                    'An unexpected error occurred.'),
+                                                    'Please fill in all fields.'),
                                               ),
                                             );
+                                          } else {
+                                            try {
+                                              final credential = await FirebaseAuth
+                                                  .instance
+                                                  .createUserWithEmailAndPassword(
+                                                email: emailAddressController.text
+                                                    .trim(),
+                                                password: passwordController.text
+                                                    .trim(),
+                                              );
+
+                                              if (credential.user != null) {
+                                                await storeUserData(emailAddressController.text);
+                                                loading = false;
+                                                setState(() {});
+                                                print('Signup successful');
+                                                userEmail = emailAddressController.text;
+                                                // Navigate to OTP widget or other destination
+                                                TransitionUtils
+                                                    .navigateWithAnimation(
+                                                        context,
+                                                        const HomeWidget());
+                                              }
+                                              loading = false;
+                                              setState(() {});
+                                            } on FirebaseAuthException catch (e) {
+                                              String errorMessage;
+                                              loading = false;
+                                              setState(() {});
+
+                                              switch (e.code) {
+                                                case 'weak-password':
+                                                  errorMessage =
+                                                      'The password provided is too weak.';
+                                                  break;
+                                                case 'email-already-in-use':
+                                                  errorMessage =
+                                                      'The account already exists for that email.';
+                                                  break;
+                                                case 'invalid-email':
+                                                  errorMessage =
+                                                      'The email address is malformed.';
+                                                  break;
+                                                default:
+                                                  errorMessage =
+                                                      'An error occurred: ${e.message}';
+                                              }
+
+                                              print(errorMessage);
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(errorMessage),
+                                                ),
+                                              );
+                                            } catch (e) {
+                                              loading = false;
+                                              setState(() {});
+                                              print(
+                                                  'An unexpected error occurred: $e');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'An unexpected error occurred.'),
+                                                ),
+                                              );
+                                            }
                                           }
-                                        }
-                                      },
-                                      text: 'Sign Up',
-                                      options: FFButtonOptions(
-                                        width: double.infinity,
-                                        height: 44,
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 0, 0, 0),
-                                        iconPadding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 0, 0, 0),
-                                        color: const Color(0xFF4B39EF),
-                                        textStyle: const TextStyle(
-                                          fontFamily: 'Plus Jakarta Sans',
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w500,
+                                        },
+                                        text: 'Sign Up',
+                                        options: FFButtonOptions(
+                                          width: double.infinity,
+                                          height: 44,
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(0, 0, 0, 0),
+                                          iconPadding: const EdgeInsetsDirectional
+                                              .fromSTEB(0, 0, 0, 0),
+                                          color: const Color(0xFF4B39EF),
+                                          textStyle: const TextStyle(
+                                            fontFamily: 'Plus Jakarta Sans',
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            letterSpacing: 0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          elevation: 3,
+                                          borderSide: const BorderSide(
+                                            color: Colors.transparent,
+                                            width: 1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(30),
                                         ),
-                                        elevation: 3,
-                                        borderSide: const BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      showLoadingIndicator: false,
-                                    ).animateOnActionTrigger(
-                                        animationsMap[
-                                            'buttonOnActionTriggerAnimation']!,
-                                        hasBeenTriggered: hasButtonTriggered),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'buttonOnPageLoadAnimation']!),
+                                        showLoadingIndicator: false,
+                                      ).animateOnActionTrigger(
+                                          animationsMap[
+                                              'buttonOnActionTriggerAnimation']!,
+                                          hasBeenTriggered: hasButtonTriggered),
+                                    ).animateOnPageLoad(animationsMap[
+                                        'buttonOnPageLoadAnimation']!),
+                                  ),
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Padding(
@@ -584,5 +618,24 @@ class _SignupWidgetState extends State<SignupWidget>
         ),
       ),
     );
+  }
+  Future<void> storeUserData(String email) async {
+    // Reference to Firestore
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Create a new document in 'users' collection with a generated ID
+    DocumentReference docRef = firestore.collection('users').doc();
+
+    // Data structure to store
+    Map<String, dynamic> userData = {
+      'email': email,
+      'Snellen Chart': {},  // Empty map for future data
+      'Color Blindness': {}, // Empty map for future data
+      'Astigmatism': {},     // Empty map for future data
+
+    };
+
+    // Store the data
+    await docRef.set(userData);
   }
 }

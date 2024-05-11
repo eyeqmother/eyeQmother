@@ -1,19 +1,24 @@
 import 'package:eyeqmother/Screens/Colorblind.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 
+import 'Home.dart';
+import 'ReportExers.dart';
 import 'report_model.dart';
 export 'report_model.dart';
 
 class ReportWidget extends StatefulWidget {
-  final List<dynamic> data;
-  final List<dynamic> data1;
+  final List<String> data;
+  final List<String> data1;
+  final String chartName;
 
-  ReportWidget({required this.data, required this.data1});
+  ReportWidget({required this.data, required this.data1, required this.chartName});
 
   @override
   State<ReportWidget> createState() => _ReportWidgetState();
@@ -53,6 +58,7 @@ class _ReportWidgetState extends State<ReportWidget>
       ],
     ),
   };
+  late int scorePercentage;
   int matchingCount = 0;
   @override
   void initState() {
@@ -66,7 +72,30 @@ class _ReportWidgetState extends State<ReportWidget>
     //  print(widget.data1);
     // print(widget.data);
     matchingCount = 0;
+    scorePercentage = calculateScore(widget.data, widget.data1);
     calculateMatchingCount();
+  }
+
+  int calculateScore(List<String> correctAnswers, List<String> selectedAnswers) {
+    if (correctAnswers.length != selectedAnswers.length) {
+      throw Exception("The lists of answers must be of the same length.");
+    }
+
+    int correctCount = 0;
+
+    // Count correct answers
+    for (int i = 0; i < correctAnswers.length; i++) {
+      if (correctAnswers[i].toUpperCase() == selectedAnswers[i].toUpperCase()) {
+        correctCount++;
+      }
+    }
+
+    // Calculate percentage
+    int percentage = ((correctCount / correctAnswers.length) * 100).round();
+    print(correctCount);
+    print(correctAnswers.length);
+    print(percentage);
+    return percentage;
   }
 
   void calculateMatchingCount() {
@@ -79,12 +108,12 @@ class _ReportWidgetState extends State<ReportWidget>
     if (widget.data.length == widget.data1.length) {
       for (int i = 0; i < widget.data.length; i++) {
         print(i);
-        if (widget.data1[i] == widget.data1[i]) {
-          matchResult.add("C"); // "C" for match
+        if (widget.data1[i] == widget.data[i]) {
+          matchResult.add(widget.data1[i]); // "C" for match
           colorResult.add(Colors.green);
           matchingCount++;
         } else {
-          matchResult.add("W"); // "W" for mismatch
+          matchResult.add(widget.data1[i]); // "W" for mismatch
           colorResult.add(Colors.red);
         }
       }
@@ -153,11 +182,11 @@ class _ReportWidgetState extends State<ReportWidget>
                               ),
                             ),
                           ),
-                          const Padding(
+                          Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
                             child: Text(
-                              'Results of Snellen Chart',
+                              'Results of ${widget.chartName}',
                               style: TextStyle(
                                 fontFamily: 'Readex Pro',
                                 color: Colors.white,
@@ -173,221 +202,225 @@ class _ReportWidgetState extends State<ReportWidget>
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  height: MediaQuery.sizeOf(context).height * 0.735,
-                  decoration: BoxDecoration(
-                    //color: FlutterFlowTheme.of(context).secondaryBackground,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.asset(
-                        'assets/images/containerQuiZ.png',
-                      ).image,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: double.infinity,//MediaQuery.sizeOf(context).height * 0.6,
+                    decoration: BoxDecoration(
+                      //color: FlutterFlowTheme.of(context).secondaryBackground,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: Image.asset(
+                          'assets/images/containerQuiZ.png',
+                        ).image,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(0),
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
                     ),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                        child: Text(
-                          'Score of tests',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            fontSize: 16,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                        child: Text(
-                          'Result  ${matchingCount}0 % efficiency',
-                          style: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            letterSpacing: 0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.width *
-                            0.65, // Adjust the height asded
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              width: 100, // Adjust the width as needed
-                              margin: EdgeInsets.all(8),
-
-                              child: buildMessageWidget(
-                                  context,
-                                  colorResult[index],
-                                  matchResult[index],
-                                  widget.data1[index],
-                                  widget.data1[index]),
-                            );
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                        child: Text(
-                          'Comments from app',
-                          style: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            fontSize: 16,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width * 0.9,
-                          height: MediaQuery.sizeOf(context).height * 0.1,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20),
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                            child: Text(
+                              'Score of tests',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 16,
+                                letterSpacing: 0,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'According to your tests results you need\nto consult with related doctor.Click the\nbutton below to find nearest doctor.',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0,
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                            child: Text(
+                              'Result  ${scorePercentage} % efficiency',
+                              style: TextStyle(
+                                fontFamily: 'Readex Pro',
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.width *
+                                0.5, // Adjust the height asded
+                            child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: widget.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  width: 100, // Adjust the width as needed
+                                  margin: EdgeInsets.all(8),
+
+                                  child: buildMessageWidget(
+                                      context,
+                                      colorResult[index],
+                                      matchResult[index],
+                                      widget.data1[index],
+                                      widget.data[index]),
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                            child: Text(
+                              'Comments from app',
+                              style: TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 16,
+                                letterSpacing: 0,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 0.9,
+                              height: MediaQuery.sizeOf(context).height * 0.11,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
                                 ),
                               ),
-                            ],
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'According to your tests results you need\nto consult with related doctor.Click the\nbutton below to find nearest doctor.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          if (scorePercentage > 40) ...{
+                            Padding(
+                              padding:
+                                  const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 20),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  if (animationsMap[
+                                          'buttonOnActionTriggerAnimation'] !=
+                                      null) {
+                                    setState(() => hasButtonTriggered = true);
+
+                                    SchedulerBinding.instance.addPostFrameCallback(
+                                        (_) async => await animationsMap[
+                                                'buttonOnActionTriggerAnimation']!
+                                            .controller
+                                            .forward(from: 0.0));
+                                  }
+
+                                  TransitionUtils.navigateWithAnimation1(
+                                      context, const RecoveryExersWidget());
+                                },
+                                text: 'Exercises',
+                                options: FFButtonOptions(
+                                  width: MediaQuery.sizeOf(context).width * 0.7,
+                                  height: 44,
+                                  padding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  iconPadding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  color: Color(0xFF4B39EF),
+                                  textStyle: TextStyle(
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    letterSpacing: 0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                showLoadingIndicator: false,
+                              ).animateOnActionTrigger(
+                                  animationsMap['buttonOnActionTriggerAnimation']!,
+                                  hasBeenTriggered: hasButtonTriggered),
+                            ).animateOnPageLoad(
+                                animationsMap['buttonOnPageLoadAnimation']!),
+                          } else ...{
+                            Padding(
+                              padding:
+                                  const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 20),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  if (animationsMap[
+                                          'buttonOnActionTriggerAnimation'] !=
+                                      null) {
+                                    setState(() => hasButtonTriggered = true);
+
+                                    SchedulerBinding.instance.addPostFrameCallback(
+                                        (_) async => await animationsMap[
+                                                'buttonOnActionTriggerAnimation']!
+                                            .controller
+                                            .forward(from: 0.0));
+                                  }
+                                  _launchURLBrowser();
+                                  // TransitionUtils.navigateWithAnimation(
+                                  //     context, const HomeWidget());
+                                },
+                                text: 'Doctor Nearby',
+                                options: FFButtonOptions(
+                                  width: MediaQuery.sizeOf(context).width * 0.7,
+                                  height: 44,
+                                  padding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  iconPadding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                  color: Color(0xFF4B39EF),
+                                  textStyle: TextStyle(
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    letterSpacing: 0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                showLoadingIndicator: false,
+                              ).animateOnActionTrigger(
+                                  animationsMap['buttonOnActionTriggerAnimation']!,
+                                  hasBeenTriggered: hasButtonTriggered),
+                            ).animateOnPageLoad(
+                                animationsMap['buttonOnPageLoadAnimation']!),
+                          }
+                        ],
                       ),
-                      if (matchingCount > 4) ...{
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
-                          child: FFButtonWidget(
-                            onPressed: () async {
-                              if (animationsMap[
-                                      'buttonOnActionTriggerAnimation'] !=
-                                  null) {
-                                setState(() => hasButtonTriggered = true);
-
-                                SchedulerBinding.instance.addPostFrameCallback(
-                                    (_) async => await animationsMap[
-                                            'buttonOnActionTriggerAnimation']!
-                                        .controller
-                                        .forward(from: 0.0));
-                              }
-
-                              // TransitionUtils.navigateWithAnimation(
-                              //     context, const HomeWidget());
-                            },
-                            text: 'Exercises',
-                            options: FFButtonOptions(
-                              width: MediaQuery.sizeOf(context).width * 0.7,
-                              height: 44,
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                              iconPadding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                              color: Color(0xFF4B39EF),
-                              textStyle: TextStyle(
-                                fontFamily: 'Plus Jakarta Sans',
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              elevation: 3,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            showLoadingIndicator: false,
-                          ).animateOnActionTrigger(
-                              animationsMap['buttonOnActionTriggerAnimation']!,
-                              hasBeenTriggered: hasButtonTriggered),
-                        ).animateOnPageLoad(
-                            animationsMap['buttonOnPageLoadAnimation']!),
-                      } else ...{
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
-                          child: FFButtonWidget(
-                            onPressed: () async {
-                              if (animationsMap[
-                                      'buttonOnActionTriggerAnimation'] !=
-                                  null) {
-                                setState(() => hasButtonTriggered = true);
-
-                                SchedulerBinding.instance.addPostFrameCallback(
-                                    (_) async => await animationsMap[
-                                            'buttonOnActionTriggerAnimation']!
-                                        .controller
-                                        .forward(from: 0.0));
-                              }
-                              _launchURLBrowser();
-                              // TransitionUtils.navigateWithAnimation(
-                              //     context, const HomeWidget());
-                            },
-                            text: 'Doctor Nearby',
-                            options: FFButtonOptions(
-                              width: MediaQuery.sizeOf(context).width * 0.7,
-                              height: 44,
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                              iconPadding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                              color: Color(0xFF4B39EF),
-                              textStyle: TextStyle(
-                                fontFamily: 'Plus Jakarta Sans',
-                                color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              elevation: 3,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            showLoadingIndicator: false,
-                          ).animateOnActionTrigger(
-                              animationsMap['buttonOnActionTriggerAnimation']!,
-                              hasBeenTriggered: hasButtonTriggered),
-                        ).animateOnPageLoad(
-                            animationsMap['buttonOnPageLoadAnimation']!),
-                      }
-                    ],
+                    ),
                   ),
                 ),
               ),

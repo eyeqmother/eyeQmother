@@ -35,14 +35,14 @@ Widget buildMessageWidget(BuildContext context, Color backgroundColor,
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (Correct == "C") ...{
+              if (Correct == icorrect) ...{
                 Text(
                   'Your answer ${Correct} was correct ',
                   style: TextStyle(
                     fontFamily: 'Readex Pro',
                   ),
                 ),
-              } else if (icorrect == "W") ...{
+              } else ...{
                 Text(
                   'Your answer ${icorrect} was incorrect ',
                   style: TextStyle(
