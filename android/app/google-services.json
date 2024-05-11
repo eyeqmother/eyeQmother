@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "365727313262",
+    "project_id": "eyeq-e5431",
+    "storage_bucket": "eyeq-e5431.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365727313262:android:27b292d9b60125c050257f",
+        "android_client_info": {
+          "package_name": "com.example.eyeqmother"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlNlO8G-ERvIrHTfPUlPNXElqw2sIhjTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
