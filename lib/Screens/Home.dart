@@ -1,8 +1,8 @@
-import 'package:quzzapp1/Screens/AstigmentQuiz.dart';
-import 'package:quzzapp1/Screens/Colorblind.dart';
-import 'package:quzzapp1/Screens/Far_near.dart';
-import 'package:quzzapp1/Screens/ReportExers.dart';
-import 'package:quzzapp1/Screens/report_home.dart';
+import 'package:eyeqmother/Screens/AstigmentQuiz.dart';
+import 'package:eyeqmother/Screens/Colorblind.dart';
+import 'package:eyeqmother/Screens/Far_near.dart';
+import 'package:eyeqmother/Screens/ReportExers.dart';
+import 'package:eyeqmother/Screens/report_home.dart';
 
 import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow_model.dart';
@@ -185,111 +185,111 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(5, 0, 5, 10),
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height * 0.09,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.asset(
-                        AppImages().Container_color,
-                      ).image,
+                child: GestureDetector(
+                  onTap: (){
+                    TransitionUtils.navigateWithAnimation1(
+                        context, const FarNearWidget());
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: MediaQuery.sizeOf(context).height * 0.09,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: Image.asset(
+                          AppImages().Container_color,
+                        ).image,
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 0,
+                          color: Color(0xFFE0E3E7),
+                          offset: Offset(
+                            0.0,
+                            1,
+                          ),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 0,
-                        color: Color(0xFFE0E3E7),
-                        offset: Offset(
-                          0.0,
-                          1,
-                        ),
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 0.2,
-                            height: MediaQuery.sizeOf(context).width * 0.2,
-                            decoration: BoxDecoration(
-                              color: const Color(0x4C4B39EF),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: const Color(0xFF4B39EF),
-                                width: 2,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Container(
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 0.2,
+                              height: MediaQuery.sizeOf(context).width * 0.2,
+                              decoration: BoxDecoration(
+                                color: const Color(0x4C4B39EF),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFF4B39EF),
+                                  width: 2,
                                 ),
-                                child: Image.asset(
-                                  'assets/images/Senllen.png',
-                                  fit: BoxFit.cover,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Container(
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset(
+                                    'assets/images/Senllen.png',
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                                child: Text(
-                                  'Snellen chart',
-                                  style: TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF10181B),
-                                    fontSize: 15,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w900,
+                          const Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                                  child: Text(
+                                    'Snellen chart',
+                                    style: TextStyle(
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      color: Color(0xFF10181B),
+                                      fontSize: 15,
+                                      letterSpacing: 0,
+                                      fontWeight: FontWeight.w900,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(12, 4, 0, 0),
-                                child: Text(
-                                  'Content about test...',
-                                  style: TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    color: Colors.black,
-                                    fontSize: 10,
-                                    letterSpacing: 0,
-                                    fontWeight: FontWeight.w500,
+                                Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.fromSTEB(12, 4, 0, 0),
+                                  child: Text(
+                                    'Content about test...',
+                                    style: TextStyle(
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                      letterSpacing: 0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Card(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          color: const Color(0xFF4B39EF),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              TransitionUtils.navigateWithAnimation1(
-                                  context, const FarNearWidget());
-                            },
+                          Card(
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            color: const Color(0xFF4B39EF),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40),
+                            ),
                             child: const Padding(
                               padding: EdgeInsets.all(4),
                               child: Icon(
@@ -299,12 +299,12 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ).animateOnPageLoad(
-                    animationsMap['containerOnPageLoadAnimation']!),
+                  ).animateOnPageLoad(
+                      animationsMap['containerOnPageLoadAnimation']!),
+                ),
               ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(5, 0, 5, 10),
@@ -412,7 +412,11 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             onTap: () {
                               // Add the navigation logic here
                               TransitionUtils.navigateWithAnimation1(
-                                  context, const ColorblindWidget());
+                                context,
+                                ColorblindWidget(
+                                  screen: 1,
+                                ),
+                              );
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(4),
@@ -535,7 +539,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           child: GestureDetector(
                             onTap: () {
                               TransitionUtils.navigateWithAnimation1(
-                                  context, const AstigquizWidget());
+                                  context,
+                                  const AstigquizWidget(
+                                    screen: 1,
+                                  ));
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(4),

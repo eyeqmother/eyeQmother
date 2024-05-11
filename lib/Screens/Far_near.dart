@@ -1,8 +1,8 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:quzzapp1/Screens/SenelenQuiz.dart';
-import 'package:quzzapp1/Screens/far.dart';
-import 'package:quzzapp1/Screens/near.dart';
+import 'package:eyeqmother/Screens/SenelenQuiz.dart';
+import 'package:eyeqmother/Screens/far.dart';
+import 'package:eyeqmother/Screens/near.dart';
 
 import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
@@ -10,9 +10,6 @@ import '../flutter_flow/flutter_flow_model.dart';
 import '../resources/app_images.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-
-import 'far_near_model.dart';
-export 'far_near_model.dart';
 
 class FarNearWidget extends StatefulWidget {
   const FarNearWidget({super.key});
@@ -23,7 +20,7 @@ class FarNearWidget extends StatefulWidget {
 
 class _FarNearWidgetState extends State<FarNearWidget>
     with TickerProviderStateMixin {
-  late FarNearModel _model;
+  //late FarNearModel _model;
 
   var hasButtonTriggered = false;
   final animationsMap = {
@@ -69,7 +66,7 @@ class _FarNearWidgetState extends State<FarNearWidget>
 
   @override
   void dispose() {
-    _model.dispose();
+    // _model.dispose();
 
     super.dispose();
   }
@@ -230,7 +227,10 @@ class _FarNearWidgetState extends State<FarNearWidget>
                     }
 
                     TransitionUtils.navigateWithAnimation(
-                        context, const SenellenQuizWidget());
+                        context,
+                        SenellenQuizWidget(
+                          screen: 1,
+                        ));
                   },
                   text: 'Proceed',
                   options: FFButtonOptions(

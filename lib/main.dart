@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quzzapp1/Screens/login_widget.dart';
-import 'package:quzzapp1/resources/app_images.dart';
+import 'package:eyeqmother/Screens/login_widget.dart';
+import 'package:eyeqmother/resources/app_images.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyBlNlO8G-ERvIrHTfPUlPNXElqw2sIhjTs",
+      appId: "1:365727313262:android:27b292d9b60125c050257f",
+      messagingSenderId: "365727313262",
+      projectId: "eyeq-e5431",
+    ),
+  );
   runApp(const MyApp());
 }
 

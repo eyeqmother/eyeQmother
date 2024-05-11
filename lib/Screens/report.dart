@@ -1,6 +1,7 @@
+import 'package:eyeqmother/Screens/Colorblind.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ import 'report_model.dart';
 export 'report_model.dart';
 
 class ReportWidget extends StatefulWidget {
-  const ReportWidget({super.key});
+  final List<dynamic> data;
+  final List<dynamic> data1;
+
+  ReportWidget({required this.data, required this.data1});
 
   @override
   State<ReportWidget> createState() => _ReportWidgetState();
@@ -19,6 +23,8 @@ class _ReportWidgetState extends State<ReportWidget>
     with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
+  List<String> matchResult = [];
+  List<Color> colorResult = [];
   final animationsMap = {
     'buttonOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -47,7 +53,7 @@ class _ReportWidgetState extends State<ReportWidget>
       ],
     ),
   };
-
+  int matchingCount = 0;
   @override
   void initState() {
     setupAnimations(
@@ -56,10 +62,48 @@ class _ReportWidgetState extends State<ReportWidget>
           !anim.applyInitialState),
       this,
     );
+    print("hello");
+    //  print(widget.data1);
+    // print(widget.data);
+    matchingCount = 0;
+    calculateMatchingCount();
+  }
+
+  void calculateMatchingCount() {
+    matchResult.clear();
+    colorResult.clear();
+
+    // print(widget.data1.length);
+    print(widget.data[0]);
+
+    if (widget.data.length == widget.data1.length) {
+      for (int i = 0; i < widget.data.length; i++) {
+        print(i);
+        if (widget.data1[i] == widget.data1[i]) {
+          matchResult.add("C"); // "C" for match
+          colorResult.add(Colors.green);
+          matchingCount++;
+        } else {
+          matchResult.add("W"); // "W" for mismatch
+          colorResult.add(Colors.red);
+        }
+      }
+    } else {
+      print("Lists have different lengths.");
+      // Handle case where lists have different lengths
+    }
+
+    // Print or debug here to verify the contents of matchResult and colorResult
+    print("matchResult: $matchResult");
+    print("colorResult: $colorResult");
+
+    setState(() {}); // Update the widget state
   }
 
   @override
   void dispose() {
+    dataList = [];
+    dataList1 = [];
     super.dispose();
   }
 
@@ -170,17 +214,34 @@ class _ReportWidgetState extends State<ReportWidget>
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: Text(
-                          'Result  40% efficiency',
+                          'Result  ${matchingCount}0 % efficiency',
                           style: TextStyle(
                             fontFamily: 'Readex Pro',
                             letterSpacing: 0,
                           ),
                         ),
                       ),
-                      buildMessageWidget(context, Color(0xFFE31010), 'P'),
-                      buildMessageWidget(context, Colors.green, 'P'),
-                      buildMessageWidget(context, Color(0xFFE31010), 'P'),
-                      buildMessageWidget(context, Color(0xFFE31010), 'P'),
+                      Container(
+                        height: MediaQuery.of(context).size.width *
+                            0.65, // Adjust the height asded
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: 5,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              width: 100, // Adjust the width as needed
+                              margin: EdgeInsets.all(8),
+
+                              child: buildMessageWidget(
+                                  context,
+                                  colorResult[index],
+                                  matchResult[index],
+                                  widget.data1[index],
+                                  widget.data1[index]),
+                            );
+                          },
+                        ),
+                      ),
                       Padding(
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
@@ -225,54 +286,107 @@ class _ReportWidgetState extends State<ReportWidget>
                           ),
                         ),
                       ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            if (animationsMap[
-                                    'buttonOnActionTriggerAnimation'] !=
-                                null) {
-                              setState(() => hasButtonTriggered = true);
+                      if (matchingCount > 4) ...{
+                        Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              if (animationsMap[
+                                      'buttonOnActionTriggerAnimation'] !=
+                                  null) {
+                                setState(() => hasButtonTriggered = true);
 
-                              SchedulerBinding.instance.addPostFrameCallback(
-                                  (_) async => await animationsMap[
-                                          'buttonOnActionTriggerAnimation']!
-                                      .controller
-                                      .forward(from: 0.0));
-                            }
+                                SchedulerBinding.instance.addPostFrameCallback(
+                                    (_) async => await animationsMap[
+                                            'buttonOnActionTriggerAnimation']!
+                                        .controller
+                                        .forward(from: 0.0));
+                              }
 
-                            // TransitionUtils.navigateWithAnimation(
-                            //     context, const HomeWidget());
-                          },
-                          text: 'Doctor Nearby',
-                          options: FFButtonOptions(
-                            width: MediaQuery.sizeOf(context).width * 0.7,
-                            height: 44,
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            iconPadding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: Color(0xFF4B39EF),
-                            textStyle: TextStyle(
-                              fontFamily: 'Plus Jakarta Sans',
-                              color: Colors.white,
-                              fontSize: 16,
-                              letterSpacing: 0,
-                              fontWeight: FontWeight.w500,
+                              // TransitionUtils.navigateWithAnimation(
+                              //     context, const HomeWidget());
+                            },
+                            text: 'Exercises',
+                            options: FFButtonOptions(
+                              width: MediaQuery.sizeOf(context).width * 0.7,
+                              height: 44,
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                              iconPadding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                              color: Color(0xFF4B39EF),
+                              textStyle: TextStyle(
+                                fontFamily: 'Plus Jakarta Sans',
+                                color: Colors.white,
+                                fontSize: 16,
+                                letterSpacing: 0,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              elevation: 3,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            elevation: 3,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
+                            showLoadingIndicator: false,
+                          ).animateOnActionTrigger(
+                              animationsMap['buttonOnActionTriggerAnimation']!,
+                              hasBeenTriggered: hasButtonTriggered),
+                        ).animateOnPageLoad(
+                            animationsMap['buttonOnPageLoadAnimation']!),
+                      } else ...{
+                        Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              if (animationsMap[
+                                      'buttonOnActionTriggerAnimation'] !=
+                                  null) {
+                                setState(() => hasButtonTriggered = true);
+
+                                SchedulerBinding.instance.addPostFrameCallback(
+                                    (_) async => await animationsMap[
+                                            'buttonOnActionTriggerAnimation']!
+                                        .controller
+                                        .forward(from: 0.0));
+                              }
+                              _launchURLBrowser();
+                              // TransitionUtils.navigateWithAnimation(
+                              //     context, const HomeWidget());
+                            },
+                            text: 'Doctor Nearby',
+                            options: FFButtonOptions(
+                              width: MediaQuery.sizeOf(context).width * 0.7,
+                              height: 44,
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                              iconPadding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                              color: Color(0xFF4B39EF),
+                              textStyle: TextStyle(
+                                fontFamily: 'Plus Jakarta Sans',
+                                color: Colors.white,
+                                fontSize: 16,
+                                letterSpacing: 0,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              elevation: 3,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          showLoadingIndicator: false,
-                        ).animateOnActionTrigger(
-                            animationsMap['buttonOnActionTriggerAnimation']!,
-                            hasBeenTriggered: hasButtonTriggered),
-                      ).animateOnPageLoad(
-                          animationsMap['buttonOnPageLoadAnimation']!),
+                            showLoadingIndicator: false,
+                          ).animateOnActionTrigger(
+                              animationsMap['buttonOnActionTriggerAnimation']!,
+                              hasBeenTriggered: hasButtonTriggered),
+                        ).animateOnPageLoad(
+                            animationsMap['buttonOnPageLoadAnimation']!),
+                      }
                     ],
                   ),
                 ),
@@ -282,5 +396,15 @@ class _ReportWidgetState extends State<ReportWidget>
         ),
       ),
     );
+  }
+
+  _launchURLBrowser() async {
+    var url =
+        Uri.parse("https://www.google.com/maps/search/eye+specialists+near+me");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

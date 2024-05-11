@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:quzzapp1/Screens/SenelenQuiz.dart';
-import 'package:quzzapp1/flutter_flow/flutter_flow_animations.dart';
+import 'package:eyeqmother/Screens/SenelenQuiz.dart';
+import 'package:eyeqmother/flutter_flow/flutter_flow_animations.dart';
 
 import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow.dart';
@@ -203,7 +203,10 @@ class _nearState extends State<near> with TickerProviderStateMixin {
                     }
 
                     TransitionUtils.navigateWithAnimation(
-                        context, const SenellenQuizWidget());
+                        context,
+                        SenellenQuizWidget(
+                          screen: 1,
+                        ));
                   },
                   text: 'Next',
                   options: FFButtonOptions(

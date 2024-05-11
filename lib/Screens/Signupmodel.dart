@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quzzapp1/Screens/Signup.dart';
+import 'package:eyeqmother/Screens/Signup.dart';
 
 import '../flutter_flow/flutter_flow_model.dart';
 

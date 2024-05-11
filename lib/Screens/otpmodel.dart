@@ -1,5 +1,5 @@
-import 'package:quzzapp1/Screens/otp.dart';
-import 'package:quzzapp1/flutter_flow/flutter_flow_model.dart';
+import 'package:eyeqmother/Screens/otp.dart';
+import 'package:eyeqmother/flutter_flow/flutter_flow_model.dart';
 
 import 'package:flutter/material.dart';
 

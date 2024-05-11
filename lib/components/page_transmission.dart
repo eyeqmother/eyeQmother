@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TransitionUtils {
   static void navigateWithAnimation(BuildContext context, Widget page) {
     Future.delayed(Duration(milliseconds: 400), () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 50),

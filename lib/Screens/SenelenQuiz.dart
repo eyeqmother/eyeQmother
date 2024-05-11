@@ -1,22 +1,21 @@
 import 'dart:math';
 
+import 'package:eyeqmother/Screens/colorchangedemo.dart';
+import 'package:eyeqmother/Screens/report.dart';
+import 'package:eyeqmother/components/page_transmission.dart';
+import 'package:eyeqmother/flutter_flow/flutter_flow_animations.dart';
+import 'package:eyeqmother/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:quzzapp1/Screens/report.dart';
-
-import '../components/page_transmission.dart';
-import '../flutter_flow/flutter_flow_model.dart';
-import '../resources/app_images.dart';
-import '/flutter_flow/flutter_flow_animations.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'colorchangedemo.dart';
-import 'senellen_quiz_model.dart';
-export 'senellen_quiz_model.dart';
+
+late List<String> dataList = [];
+late List<String> dataList1 = [];
 
 class SenellenQuizWidget extends StatefulWidget {
-  const SenellenQuizWidget({super.key});
+  final int screen;
+  const SenellenQuizWidget({super.key, required this.screen});
 
   @override
   State<SenellenQuizWidget> createState() => _SenellenQuizWidgetState();
@@ -24,37 +23,177 @@ class SenellenQuizWidget extends StatefulWidget {
 
 class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     with TickerProviderStateMixin {
-  late SenellenQuizModel _model;
+  // final scaffoldKey = GlobalKey<ScaffoldState>();
+  // var hasButtonTriggered = false;
+  // Color firstButtonColor = Colors.white; // Initial color for the first button
+  // Color secondButtonColor = Colors.white; // Initial color for the second button
+  // Color thirdButtonColor = Colors.white; // Initial color for the third button
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  // Color firstButtonColortext =
+  //     Color(0xFF4B39EF); // Initial color for the first button
+  // Color secondButtonColortext =
+  //     Color(0xFF4B39EF); // Initial color for the second button
+  // Color thirdButtonColortext =
+  //     Color(0xFF4B39EF); // Initial color for the third button
+
+  // List<String> resultList = []; // Initialize an empty list to store results
+  // int currentIndex = 0; // Initialize a counter for the current index,
+
+  // var option1 = '';
+  // late String randomLetter3;
+  // late String randomLetter2;
+  // final animationsMap = {
+  //   'progressBarOnPageLoadAnimation': AnimationInfo(
+  //     trigger: AnimationTrigger.onPageLoad,
+  //     effects: [
+  //       FadeEffect(
+  //         curve: Curves.easeInOut,
+  //         delay: 0.ms,
+  //         duration: 600.ms,
+  //         begin: 0,
+  //         end: 1,
+  //       ),
+  //       MoveEffect(
+  //         curve: Curves.easeInOut,
+  //         delay: 0.ms,
+  //         duration: 600.ms,
+  //         begin: Offset(-50, 0),
+  //         end: Offset(0, 0),
+  //       ),
+  //       ScaleEffect(
+  //         curve: Curves.easeInOut,
+  //         delay: 0.ms,
+  //         duration: 600.ms,
+  //         begin: Offset(0.7, 0.7),
+  //         end: Offset(1, 1),
+  //       ),
+  //     ],
+  //   ),
+  //   'buttonOnPageLoadAnimation': AnimationInfo(
+  //     trigger: AnimationTrigger.onPageLoad,
+  //     applyInitialState: false,
+  //     effects: [
+  //       MoveEffect(
+  //         curve: Curves.easeInOut,
+  //         delay: 0.ms,
+  //         duration: 600.ms,
+  //         begin: Offset(0, 0),
+  //         end: Offset(0, 0),
+  //       ),
+  //     ],
+  //   ),
+  //   'buttonOnActionTriggerAnimation': AnimationInfo(
+  //     trigger: AnimationTrigger.onActionTrigger,
+  //     applyInitialState: false,
+  //     effects: [
+  //       ScaleEffect(
+  //         curve: Curves.elasticOut,
+  //         delay: 30.ms,
+  //         duration: 500.ms,
+  //         begin: Offset(0.7, 1),
+  //         end: Offset(1, 1),
+  //       ),
+  //     ],
+  //   ),
+  // };
+  // late bool status;
+  // late bool status1 = false;
+  // late double normalizedScreen;
+  // int screen = 0;
+  // late String option;
+  // final random = Random();
+  // late int randomNumber;
+
+  // late List<String> dataList = [];
+  // late List<String> dataList1 = [];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // number();
+
+  //   setState(() {
+  //     screen = widget.screen;
+  //     normalizedScreen = screen / 10.0;
+  //     final random3 = Random();
+  //     int randomIndex3 = random3.nextInt(26);
+  //     int asciiCode3 = 65 + randomIndex3;
+  //     randomLetter3 = String.fromCharCode(asciiCode3);
+
+  //     final random2 = Random();
+  //     int randomIndex2 = random2.nextInt(26);
+  //     int asciiCode2 = 65 + randomIndex2;
+  //     randomLetter2 = String.fromCharCode(asciiCode2);
+  //   });
+  //   status = false;
+
+  //   setState(() {
+  //     firstButtonColor = Colors.white;
+  //     secondButtonColor = Colors.white;
+  //     thirdButtonColor = Colors.white;
+
+  //     randomNumber = random.nextInt(3);
+  //   });
+
+  //   setupAnimations(
+  //     animationsMap.values.where((anim) =>
+  //         anim.trigger == AnimationTrigger.onActionTrigger ||
+  //         !anim.applyInitialState),
+  //     this,
+  //   );
+  //   _initializeTextInfoList();
+  //   randomChange();
+  // }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   animationsMap.values.forEach((animation) => animation.controller.dispose());
+  // }
+
   var hasButtonTriggered = false;
+
+  final List<String> myList = [
+    "7",
+    "10",
+    "9",
+    "74",
+    "1",
+    "12",
+    "39",
+    "2",
+    "26",
+    "4",
+    "15",
+    "96",
+    "3",
+    "29",
+    "16",
+    "27",
+    "57",
+    "5"
+  ];
+
+  Color firstButtonColor = Colors.white; // Initial color for the first button
+  Color secondButtonColor = Colors.white; // Initial color for the second button
+  Color thirdButtonColor = Colors.white; // Initial color for the third button
+
+  Color firstButtonColortext =
+      Color(0xFF4B39EF); // Initial color for the first button
+  Color secondButtonColortext =
+      Color(0xFF4B39EF); // Initial color for the second button
+  Color thirdButtonColortext =
+      Color(0xFF4B39EF); // Initial color for the third button
+
+  List<String> resultList = []; // Initialize an empty list to store results
+  int currentIndex = 0; // Initialize a counter for the current index,
+
+  var option1 = '';
+  String randomLetter3 = "";
+  late String randomLetter2 = '';
+
   final animationsMap = {
-    'progressBarOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: 0,
-          end: 1,
-        ),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: Offset(-50, 0),
-          end: Offset(0, 0),
-        ),
-        ScaleEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: Offset(0.7, 0.7),
-          end: Offset(1, 1),
-        ),
-      ],
-    ),
     'buttonOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       applyInitialState: false,
@@ -83,10 +222,42 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     ),
   };
 
+  late bool status = false;
+  late bool status1 = false;
+  double normalizedScreen = 1;
+  int screen = 0;
+  late String option;
+  final random = Random();
+  late int randomNumber;
+
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SenellenQuizModel());
+
+    // number();
+
+    setState(() {
+      screen = widget.screen;
+      normalizedScreen = screen / 10.0;
+      final random3 = Random();
+      int randomIndex3 = random3.nextInt(26);
+      int asciiCode3 = 65 + randomIndex3;
+      randomLetter3 = String.fromCharCode(asciiCode3);
+
+      final random2 = Random();
+      int randomIndex2 = random2.nextInt(26);
+      int asciiCode2 = 65 + randomIndex2;
+      randomLetter2 = String.fromCharCode(asciiCode2);
+    });
+    status = false;
+
+    setState(() {
+      firstButtonColor = Colors.white;
+      secondButtonColor = Colors.white;
+      thirdButtonColor = Colors.white;
+
+      randomNumber = random.nextInt(3);
+    });
 
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -100,8 +271,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
 
   @override
   void dispose() {
-    _model.dispose();
-
+    animationsMap.values.forEach((animation) => animation.controller.dispose());
     super.dispose();
   }
 
@@ -211,17 +381,15 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     // Set color of random text to red
     setState(() {
       _textInfoList[row][col].color = Colors.red;
+      print(_textInfoList[row][col].text);
+      option1 = _textInfoList[row][col].text;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
       child: Scaffold(
-        key: scaffoldKey,
         backgroundColor: Colors.white,
         body: SafeArea(
           top: true,
@@ -231,32 +399,6 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
-
-              // Center(
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: List.generate(
-              //       _textInfoList.length,
-              //       (row) => Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: List.generate(
-              //           _textInfoList[row].length,
-              //           (col) => Padding(
-              //             padding: EdgeInsets.symmetric(vertical: 3.0),
-              //             child: Text(
-              //               _textInfoList[row][col].text,
-              //               style: TextStyle(
-              //                 fontSize: _textInfoList[row][col].fontSize,
-              //                 color: _textInfoList[row][col].color,
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -288,17 +430,18 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             // Container to add after the 4th row
                             // Generated code for this Container Widget...
                             SizedBox(
-                              height: MediaQuery.sizeOf(context).height * 0.005,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.005,
                             ),
                             Container(
-                              width: MediaQuery.sizeOf(context).width * 0.7,
-                              height: MediaQuery.sizeOf(context).height * 0.01,
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.01,
                               decoration: BoxDecoration(
                                 color: Color(0xFFFD0000),
                               ),
                             ),
                             SizedBox(
-                              height: MediaQuery.sizeOf(context).height * 0.01,
+                              height: MediaQuery.of(context).size.height * 0.01,
                             )
                           ],
                         );
@@ -327,17 +470,18 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             ),
                             // Container to add after the specific row
                             SizedBox(
-                              height: MediaQuery.sizeOf(context).height * 0.01,
+                              height: MediaQuery.of(context).size.height * 0.01,
                             ),
                             Container(
-                              width: MediaQuery.sizeOf(context).width * 0.5,
-                              height: MediaQuery.sizeOf(context).height * 0.01,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              height: MediaQuery.of(context).size.height * 0.01,
                               decoration: BoxDecoration(
                                 color: Color(0xFF4AB40E),
                               ),
                             ),
                             SizedBox(
-                              height: MediaQuery.sizeOf(context).height * 0.005,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.005,
                             )
                           ],
                         );
@@ -364,25 +508,11 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                   ),
                 ),
               ),
-
-              //ColorChangeDemo(),
-              // Align(
-              //   alignment: AlignmentDirectional(0, -1),
-              //   child: ClipRRect(
-              //     borderRadius: BorderRadius.circular(8),
-              //     child: Image.asset(
-              //       AppImages().sentelQuiz1,
-              //       width: MediaQuery.sizeOf(context).width * 0.65,
-              //       height: MediaQuery.sizeOf(context).height * 0.6,
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
               CircularPercentIndicator(
-                percent: 0.2,
+                percent: normalizedScreen,
                 radius: 20,
                 lineWidth: 4,
                 animation: true,
@@ -390,7 +520,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                 progressColor: Color(0xFF4B39EF),
                 backgroundColor: Color(0xFFE0E3E7),
                 center: Text(
-                  '20',
+                  '${screen}',
                   style: TextStyle(
                     fontFamily: 'Outfit',
                     color: Color(0xFF14181B),
@@ -399,47 +529,162 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              ).animateOnPageLoad(
-                  animationsMap['progressBarOnPageLoadAnimation']!),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                child: Text(
-                  'What is the circled alphabet?',
-                  style: TextStyle(
-                    fontFamily: 'Readex Pro',
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
-                  children: [],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () {
+                        setState(() {
+                          firstButtonColor = Color(0xFF4B39EF);
+                          secondButtonColor = Colors.white;
+                          thirdButtonColor = Colors.white;
+                          status = true;
+                          secondButtonColortext = Color(0xFF4B39EF);
+                          firstButtonColortext = Colors.white;
+                          thirdButtonColortext = Color(0xFF4B39EF);
+                          dataList.add(option1.trim());
+                          dataList1.add(option1.trim());
+                        });
+                        print('First button pressed ...');
+                      },
+                      text: option1,
+                      options: FFButtonOptions(
+                        width: MediaQuery.of(context).size.width * 0.18,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        color: firstButtonColor,
+                        textStyle: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: firstButtonColortext,
+                          letterSpacing: 0,
+                        ),
+                        elevation: 3,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      showLoadingIndicator: false,
+                    ),
+                    FFButtonWidget(
+                      onPressed: () {
+                        setState(() {
+                          firstButtonColor = Colors.white;
+                          secondButtonColor = Color(0xFF4B39EF);
+                          thirdButtonColor = Colors.white;
+                          status = true;
+
+                          firstButtonColortext = Color(0xFF4B39EF);
+                          secondButtonColortext = Colors.white;
+                          thirdButtonColortext = Color(0xFF4B39EF);
+
+                          dataList.add(option1.trim());
+                          dataList1.add(randomLetter3);
+                          print(dataList);
+                          print(dataList1);
+                        });
+                        print('Second button pressed ...');
+                      },
+                      text: randomLetter3,
+                      options: FFButtonOptions(
+                        width: MediaQuery.of(context).size.width * 0.18,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        color: secondButtonColor,
+                        textStyle: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: secondButtonColortext,
+                          letterSpacing: 0,
+                        ),
+                        elevation: 3,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      showLoadingIndicator: false,
+                    ),
+                    FFButtonWidget(
+                      onPressed: () {
+                        setState(() {
+                          firstButtonColor = Colors.white;
+                          secondButtonColor = Colors.white;
+                          thirdButtonColor = Color(0xFF4B39EF);
+                          status = true;
+
+                          secondButtonColortext = Color(0xFF4B39EF);
+                          thirdButtonColortext = Colors.white;
+                          firstButtonColortext = Color(0xFF4B39EF);
+
+                          dataList.add(option1.trim());
+                          dataList1.add(randomLetter2);
+                          print(dataList);
+                          print(dataList1);
+                        });
+                        print('Second button pressed ...');
+                      },
+                      text: randomLetter2,
+                      options: FFButtonOptions(
+                        width: MediaQuery.of(context).size.width * 0.18,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        color: thirdButtonColor,
+                        textStyle: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: thirdButtonColortext,
+                          letterSpacing: 0,
+                        ),
+                        elevation: 3,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      showLoadingIndicator: false,
+                    ),
+                  ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                 child: FFButtonWidget(
                   onPressed: () async {
                     if (animationsMap['buttonOnActionTriggerAnimation'] !=
                         null) {
                       setState(() => hasButtonTriggered = true);
 
-                      SchedulerBinding.instance.addPostFrameCallback(
+                      SchedulerBinding.instance!.addPostFrameCallback(
                           (_) async => await animationsMap[
                                   'buttonOnActionTriggerAnimation']!
                               .controller
                               .forward(from: 0.0));
                     }
-
-                    TransitionUtils.navigateWithAnimation(
-                        context, const ReportWidget());
+                    setState(() {
+                      if (status == true) {
+                        if (screen < 10) {
+                          screen++;
+                          TransitionUtils.navigateWithAnimation(
+                              context, SenellenQuizWidget(screen: screen));
+                        } else {
+                          TransitionUtils.navigateWithAnimation(context,
+                              ReportWidget(data: dataList, data1: dataList1));
+                        }
+                      }
+                    });
                   },
                   text: 'Proceed',
                   options: FFButtonOptions(
-                    width: MediaQuery.sizeOf(context).width * 0.75,
+                    width: MediaQuery.of(context).size.width * 0.75,
                     height: 44,
                     padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                     iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
@@ -468,5 +713,49 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
         ),
       ),
     );
+  }
+
+  String number1_func(String option1, int random, int counter) {
+    print(random);
+    final random3 = Random();
+    int randomIndex3 = random3
+        .nextInt(26); // Generate a random number between 0 and 25 (inclusive)
+
+    // Convert the random index to the corresponding ASCII value for a capital letter (65 for 'A', 90 for 'Z')
+    int asciiCode3 = 65 + randomIndex3;
+
+    // Use String.fromCharCode to convert the ASCII code to a character
+    randomLetter3 = String.fromCharCode(asciiCode3);
+
+    // More efficient approach using switch statement
+    print(randomLetter3);
+
+    if (random == 0) {
+      print('hello1');
+      status1 = true;
+      resultList[counter];
+      return option1;
+    } else if (random == 1) {
+      print('hello2');
+      status1 = true;
+      resultList[counter];
+      return option1;
+    } else if (random == 2) {
+      print('hello3');
+      status1 = true;
+      resultList[counter];
+      return option1;
+    } else {
+      resultList[counter];
+      return randomLetter3;
+    }
+  }
+
+  int num(int random) {
+    if (status1 == false) {
+      return random;
+    } else {
+      return 3;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:quzzapp1/Screens/Exersize1.dart';
+import 'package:eyeqmother/Screens/Exersize1.dart';
 
 import '../components/page_transmission.dart';
 import '/flutter_flow/flutter_flow_theme.dart';

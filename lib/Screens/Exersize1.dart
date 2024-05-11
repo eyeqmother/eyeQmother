@@ -1,4 +1,4 @@
-import 'package:quzzapp1/resources/app_images.dart';
+import 'package:eyeqmother/resources/app_images.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';

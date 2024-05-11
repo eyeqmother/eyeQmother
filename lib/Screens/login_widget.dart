@@ -1,8 +1,10 @@
+import 'package:eyeqmother/Screens/forger.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:quzzapp1/Screens/Home.dart';
-import 'package:quzzapp1/Screens/Signup.dart';
-import 'package:quzzapp1/components/page_transmission.dart';
-import 'package:quzzapp1/resources/app_images.dart';
+import 'package:eyeqmother/Screens/Home.dart';
+import 'package:eyeqmother/Screens/Signup.dart';
+import 'package:eyeqmother/components/page_transmission.dart';
+import 'package:eyeqmother/resources/app_images.dart';
 
 import '../flutter_flow/flutter_flow_model.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -24,10 +26,15 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget>
     with TickerProviderStateMixin {
-  late LoginModel _model;
+  late TextEditingController emailAddressController;
+  late TextEditingController passwordController;
+  bool passwordVisibility = false;
+  bool checkboxValue = true;
 
+  late bool _showSpinner = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
+
   final animationsMap = {
     'buttonOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -60,13 +67,9 @@ class _LoginWidgetState extends State<LoginWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => LoginModel());
 
-    _model.emailAddressController ??= TextEditingController();
-    _model.emailAddressFocusNode ??= FocusNode();
-
-    _model.passwordController ??= TextEditingController();
-    _model.passwordFocusNode ??= FocusNode();
+    emailAddressController = TextEditingController();
+    passwordController = TextEditingController();
 
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -78,8 +81,6 @@ class _LoginWidgetState extends State<LoginWidget>
 
   @override
   void dispose() {
-    _model.dispose();
-
     super.dispose();
   }
 
@@ -181,9 +182,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                     child: Container(
                                       width: double.infinity,
                                       child: TextFormField(
-                                        controller:
-                                            _model.emailAddressController,
-                                        focusNode: _model.emailAddressFocusNode,
+                                        controller: emailAddressController,
+                                        //  focusNode: _model.emailAddressFocusNode,
                                         autofocus: false,
                                         autofillHints: [AutofillHints.email],
                                         obscureText: false,
@@ -242,12 +242,13 @@ class _LoginWidgetState extends State<LoginWidget>
                                         minLines: null,
                                         keyboardType:
                                             TextInputType.emailAddress,
-                                        validator: _model
-                                            .emailAddressControllerValidator
-                                            .asValidator(context),
+                                        // validator: _model
+                                        //     .emailAddressControllerValidator
+                                        //     .asValidator(context),
                                       ),
                                     ),
                                   ),
+
                                   const Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 5, 0, 5),
@@ -269,11 +270,11 @@ class _LoginWidgetState extends State<LoginWidget>
                                     child: Container(
                                       width: double.infinity,
                                       child: TextFormField(
-                                        controller: _model.passwordController,
-                                        focusNode: _model.passwordFocusNode,
+                                        controller: passwordController,
+                                        //  focusNode: passwordFocusNode,
                                         autofocus: false,
                                         autofillHints: [AutofillHints.password],
-                                        obscureText: !_model.passwordVisibility,
+                                        obscureText: !passwordVisibility,
                                         decoration: InputDecoration(
                                           labelText: 'Password',
                                           labelStyle: const TextStyle(
@@ -320,13 +321,13 @@ class _LoginWidgetState extends State<LoginWidget>
                                           fillColor: const Color(0xFFF1F4F8),
                                           suffixIcon: InkWell(
                                             onTap: () => setState(
-                                              () => _model.passwordVisibility =
-                                                  !_model.passwordVisibility,
+                                              () => passwordVisibility =
+                                                  !passwordVisibility,
                                             ),
                                             focusNode:
                                                 FocusNode(skipTraversal: true),
                                             child: Icon(
-                                              _model.passwordVisibility
+                                              passwordVisibility
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
@@ -343,29 +344,37 @@ class _LoginWidgetState extends State<LoginWidget>
                                           fontWeight: FontWeight.w500,
                                         ),
                                         minLines: null,
-                                        validator: _model
-                                            .passwordControllerValidator
-                                            .asValidator(context),
+                                        // validator:
+                                        //     passwordControllerValidator
+                                        //     .asValidator(context),
                                       ),
                                     ),
                                   ),
-                                  const Align(
+                                  Align(
                                     alignment: AlignmentDirectional(1, 0),
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 0, 0, 5),
-                                      child: Text(
-                                        'Forget password?',
-                                        style: TextStyle(
-                                          fontFamily: 'Plus Jakarta Sans',
-                                          color: Colors.black,
-                                          fontSize: 12,
-                                          letterSpacing: 0,
-                                          fontWeight: FontWeight.w500,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          TransitionUtils
+                                              .navigateWithAnimation1(
+                                                  context, RestPassword());
+                                        },
+                                        child: Text(
+                                          'Forget password?',
+                                          style: TextStyle(
+                                            fontFamily: 'Plus Jakarta Sans',
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            letterSpacing: 0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
+
                                   Padding(
                                     padding:
                                         const EdgeInsetsDirectional.fromSTEB(
@@ -385,9 +394,80 @@ class _LoginWidgetState extends State<LoginWidget>
                                                       .controller
                                                       .forward(from: 0.0));
                                         }
+                                        print(emailAddressController.text);
 
-                                        TransitionUtils.navigateWithAnimation(
-                                            context, const HomeWidget());
+                                        if (emailAddressController.text
+                                                .trim()
+                                                .isEmpty ||
+                                            passwordController.text
+                                                .trim()
+                                                .isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'Please fill in all fields.'),
+                                            ),
+                                          );
+                                        } else {
+                                          try {
+                                            final credential =
+                                                await FirebaseAuth.instance
+                                                    .signInWithEmailAndPassword(
+                                              email: emailAddressController.text
+                                                  .trim(),
+                                              password: passwordController.text
+                                                  .trim(),
+                                            );
+
+                                            if (credential.user != null) {
+                                              print('Login successful');
+                                              // Navigate to OTP widget or other destination
+                                              TransitionUtils
+                                                  .navigateWithAnimation(
+                                                      context,
+                                                      const HomeWidget());
+                                            }
+                                          } on FirebaseAuthException catch (e) {
+                                            String errorMessage;
+
+                                            switch (e.code) {
+                                              case 'user-not-found':
+                                                errorMessage =
+                                                    'No user found for that email.';
+                                                break;
+                                              case 'wrong-password':
+                                                errorMessage =
+                                                    'Wrong password provided for that user.';
+                                                break;
+                                              case 'invalid-email':
+                                                errorMessage =
+                                                    'The email address is malformed.';
+                                                break;
+                                              default:
+                                                errorMessage =
+                                                    'An error occurred: ${e.message}';
+                                            }
+
+                                            print(errorMessage);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(errorMessage),
+                                              ),
+                                            );
+                                          } catch (e) {
+                                            print(
+                                                'An unexpected error occurred: $e');
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'An unexpected error occurred.'),
+                                              ),
+                                            );
+                                          }
+                                        }
                                       },
                                       text: 'Login',
                                       options: FFButtonOptions(

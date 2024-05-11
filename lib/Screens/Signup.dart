@@ -1,23 +1,20 @@
-import 'package:quzzapp1/Screens/Home.dart';
-import 'package:quzzapp1/Screens/login_widget.dart';
-import 'package:quzzapp1/Screens/otp.dart';
-import 'package:quzzapp1/resources/app_images.dart';
-
+import 'package:eyeqmother/Screens/Home.dart';
+import 'package:eyeqmother/Screens/login_widget.dart';
+import 'package:eyeqmother/Screens/otp.dart';
+import 'package:eyeqmother/resources/app_images.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:validators/validators.dart' as validator;
 import '../components/page_transmission.dart';
-import '../flutter_flow/flutter_flow_model.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import 'Signupmodel.dart';
-
 class SignupWidget extends StatefulWidget {
-  const SignupWidget({super.key});
+  const SignupWidget({Key? key}) : super(key: key);
 
   @override
   State<SignupWidget> createState() => _SignupWidgetState();
@@ -25,10 +22,15 @@ class SignupWidget extends StatefulWidget {
 
 class _SignupWidgetState extends State<SignupWidget>
     with TickerProviderStateMixin {
-  late SignupModel _model;
+  late TextEditingController emailAddressController;
+  late TextEditingController passwordController;
+  bool passwordVisibility = false;
+  bool checkboxValue = true;
 
+  late bool _showSpinner = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
+
   final animationsMap = {
     'buttonOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -60,17 +62,8 @@ class _SignupWidgetState extends State<SignupWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SignupModel());
-
-    _model.emailAddressController ??= TextEditingController();
-    _model.emailAddressFocusNode ??= FocusNode();
-
-    _model.passwordController ??= TextEditingController();
-    _model.passwordFocusNode ??= FocusNode();
-
-    _model.textController3 ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
-
+    emailAddressController = TextEditingController();
+    passwordController = TextEditingController();
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
@@ -81,7 +74,7 @@ class _SignupWidgetState extends State<SignupWidget>
 
   @override
   void dispose() {
-    _model.dispose();
+    _showSpinner = false;
 
     super.dispose();
   }
@@ -89,9 +82,6 @@ class _SignupWidgetState extends State<SignupWidget>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.white,
@@ -134,7 +124,7 @@ class _SignupWidgetState extends State<SignupWidget>
                               child: Image.asset(
                                 AppImages().signuP_login_logo,
                                 height:
-                                    MediaQuery.sizeOf(context).height * 0.08,
+                                    MediaQuery.of(context).size.height * 0.08,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -186,9 +176,8 @@ class _SignupWidgetState extends State<SignupWidget>
                                     child: Container(
                                       width: double.infinity,
                                       child: TextFormField(
-                                        controller:
-                                            _model.emailAddressController,
-                                        focusNode: _model.emailAddressFocusNode,
+                                        controller: emailAddressController,
+                                        //  focusNode: emailAddressFocusNode,
                                         autofocus: false,
                                         autofillHints: [AutofillHints.email],
                                         obscureText: false,
@@ -247,9 +236,9 @@ class _SignupWidgetState extends State<SignupWidget>
                                         minLines: null,
                                         keyboardType:
                                             TextInputType.emailAddress,
-                                        validator: _model
-                                            .emailAddressControllerValidator
-                                            .asValidator(context),
+                                        // validator:
+                                        //     emailAddressControllerValidator
+                                        //     .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -257,7 +246,7 @@ class _SignupWidgetState extends State<SignupWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 5, 0, 5),
                                     child: Text(
-                                      'Password Address',
+                                      'Password',
                                       style: TextStyle(
                                         fontFamily: 'Plus Jakarta Sans',
                                         color: Colors.black,
@@ -273,11 +262,11 @@ class _SignupWidgetState extends State<SignupWidget>
                                     child: Container(
                                       width: double.infinity,
                                       child: TextFormField(
-                                        controller: _model.passwordController,
-                                        focusNode: _model.passwordFocusNode,
+                                        controller: passwordController,
+                                        //    focusNode: passwordFocusNode,
                                         autofocus: false,
                                         autofillHints: [AutofillHints.password],
-                                        obscureText: !_model.passwordVisibility,
+                                        obscureText: !passwordVisibility,
                                         decoration: InputDecoration(
                                           labelText: 'Password',
                                           labelStyle: TextStyle(
@@ -324,13 +313,13 @@ class _SignupWidgetState extends State<SignupWidget>
                                           fillColor: Color(0xFFF1F4F8),
                                           suffixIcon: InkWell(
                                             onTap: () => setState(
-                                              () => _model.passwordVisibility =
-                                                  !_model.passwordVisibility,
+                                              () => passwordVisibility =
+                                                  !passwordVisibility,
                                             ),
                                             focusNode:
                                                 FocusNode(skipTraversal: true),
                                             child: Icon(
-                                              _model.passwordVisibility
+                                              passwordVisibility
                                                   ? Icons.visibility_outlined
                                                   : Icons
                                                       .visibility_off_outlined,
@@ -347,27 +336,12 @@ class _SignupWidgetState extends State<SignupWidget>
                                           fontWeight: FontWeight.w500,
                                         ),
                                         minLines: null,
-                                        validator: _model
-                                            .passwordControllerValidator
-                                            .asValidator(context),
+                                        // validator: _model
+                                        //     .passwordControllerValidator
+                                        //     .asValidator(context),
                                       ),
                                     ),
                                   ),
-                                  // Padding(
-                                  //   padding: EdgeInsetsDirectional.fromSTEB(
-                                  //       0, 5, 0, 5),
-                                  //   child: Text(
-                                  //     'Mobile Number',
-                                  //     style: TextStyle(
-                                  //       fontFamily: 'Plus Jakarta Sans',
-                                  //       color: Colors.black,
-                                  //       fontSize: 14,
-                                  //       letterSpacing: 0,
-                                  //       fontWeight: FontWeight.w500,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // Generated code for this Column Widget...
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 30, 0, 0),
@@ -396,12 +370,10 @@ class _SignupWidgetState extends State<SignupWidget>
                                                     Colors.black,
                                               ),
                                               child: Checkbox(
-                                                value: _model.checkboxValue ??=
-                                                    true,
+                                                value: checkboxValue ??= true,
                                                 onChanged: (newValue) async {
-                                                  setState(() =>
-                                                      _model.checkboxValue =
-                                                          newValue!);
+                                                  setState(() => checkboxValue =
+                                                      newValue!);
                                                 },
                                                 side: BorderSide(
                                                   width: 2,
@@ -431,7 +403,6 @@ class _SignupWidgetState extends State<SignupWidget>
                                       ],
                                     ),
                                   ),
-
                                   Padding(
                                     padding:
                                         const EdgeInsetsDirectional.fromSTEB(
@@ -445,17 +416,87 @@ class _SignupWidgetState extends State<SignupWidget>
                                               () => hasButtonTriggered = true);
 
                                           SchedulerBinding.instance
-                                              .addPostFrameCallback((_) async =>
-                                                  await animationsMap[
-                                                          'buttonOnActionTriggerAnimation']!
-                                                      .controller
-                                                      .forward(from: 0.0));
+                                              .addPostFrameCallback((_) async {
+                                            await animationsMap[
+                                                    'buttonOnActionTriggerAnimation']!
+                                                .controller
+                                                .forward(from: 0.0);
+                                          });
                                         }
+                                        if (emailAddressController.text
+                                                .trim()
+                                                .isEmpty ||
+                                            passwordController.text
+                                                .trim()
+                                                .isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'Please fill in all fields.'),
+                                            ),
+                                          );
+                                        } else {
+                                          try {
+                                            final credential = await FirebaseAuth
+                                                .instance
+                                                .createUserWithEmailAndPassword(
+                                              email: emailAddressController.text
+                                                  .trim(),
+                                              password: passwordController.text
+                                                  .trim(),
+                                            );
 
-                                        TransitionUtils.navigateWithAnimation(
-                                            context, const OtpWidget());
+                                            if (credential.user != null) {
+                                              print('Signup successful');
+                                              // Navigate to OTP widget or other destination
+                                              TransitionUtils
+                                                  .navigateWithAnimation(
+                                                      context,
+                                                      const HomeWidget());
+                                            }
+                                          } on FirebaseAuthException catch (e) {
+                                            String errorMessage;
+
+                                            switch (e.code) {
+                                              case 'weak-password':
+                                                errorMessage =
+                                                    'The password provided is too weak.';
+                                                break;
+                                              case 'email-already-in-use':
+                                                errorMessage =
+                                                    'The account already exists for that email.';
+                                                break;
+                                              case 'invalid-email':
+                                                errorMessage =
+                                                    'The email address is malformed.';
+                                                break;
+                                              default:
+                                                errorMessage =
+                                                    'An error occurred: ${e.message}';
+                                            }
+
+                                            print(errorMessage);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(errorMessage),
+                                              ),
+                                            );
+                                          } catch (e) {
+                                            print(
+                                                'An unexpected error occurred: $e');
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'An unexpected error occurred.'),
+                                              ),
+                                            );
+                                          }
+                                        }
                                       },
-                                      text: 'Login',
+                                      text: 'Sign Up',
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 44,
@@ -485,7 +526,6 @@ class _SignupWidgetState extends State<SignupWidget>
                                         hasBeenTriggered: hasButtonTriggered),
                                   ).animateOnPageLoad(animationsMap[
                                       'buttonOnPageLoadAnimation']!),
-                                  // You will have to add an action on this rich text to go to your login page.
                                   Align(
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Padding(
@@ -498,8 +538,6 @@ class _SignupWidgetState extends State<SignupWidget>
                                                   context, const LoginWidget());
                                         },
                                         child: RichText(
-                                          textScaler:
-                                              MediaQuery.of(context).textScaler,
                                           text: TextSpan(
                                             children: [
                                               TextSpan(

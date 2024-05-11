@@ -1,7 +1,7 @@
-import 'package:quzzapp1/Screens/AstigmentQuiz.dart';
-import 'package:quzzapp1/Screens/Colorblind.dart';
-import 'package:quzzapp1/Screens/Far_near.dart';
-import 'package:quzzapp1/Screens/ReportExers.dart';
+import 'package:eyeqmother/Screens/AstigmentQuiz.dart';
+import 'package:eyeqmother/Screens/Colorblind.dart';
+import 'package:eyeqmother/Screens/Far_near.dart';
+import 'package:eyeqmother/Screens/ReportExers.dart';
 
 import '../components/page_transmission.dart';
 import '../resources/app_images.dart';

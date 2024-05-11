@@ -1,6 +1,6 @@
 // TODO Implement this library.
 
-import 'package:quzzapp1/Screens/Home.dart';
+import 'package:eyeqmother/Screens/Home.dart';
 
 import '../flutter_flow/flutter_flow_model.dart';
 

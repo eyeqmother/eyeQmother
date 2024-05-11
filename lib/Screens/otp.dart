@@ -1,7 +1,7 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:quzzapp1/Screens/Home.dart';
-import 'package:quzzapp1/flutter_flow/flutter_flow_animations.dart';
+import 'package:eyeqmother/Screens/Home.dart';
+import 'package:eyeqmother/flutter_flow/flutter_flow_animations.dart';
 
 import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow_model.dart';

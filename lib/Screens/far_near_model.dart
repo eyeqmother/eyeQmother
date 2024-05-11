@@ -1,6 +1,6 @@
 // TODO Implement this library.
 
-import 'package:quzzapp1/Screens/Far_near.dart';
+import 'package:eyeqmother/Screens/Far_near.dart';
 
 import '../flutter_flow/flutter_flow_model.dart';
 import 'package:flutter/material.dart';
