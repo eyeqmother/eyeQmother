@@ -62,6 +62,40 @@ class _homereport2State extends State<homereport2> {
 
   Map<dynamic, dynamic>? values;
 
+  // Future<void> _initializeData() async {
+  //   User? user = FirebaseAuth.instance.currentUser;
+
+  //   if (user != null) {
+  //     // User is signed in
+  //     String uid = user.uid;
+  //     print('User ID: $uid');
+
+  //     DatabaseReference ref = FirebaseDatabase.instance.ref(user.uid);
+
+  //     // Read the updated data
+  //     DataSnapshot snapshot = await ref.once().then((event) => event.snapshot);
+  //     if (snapshot.value != null && snapshot.value is Map) {
+  //       // values = snapshot.value as Map<dynamic, dynamic>;
+  //       values = snapshot.value as Map<dynamic, dynamic>;
+  //       if (values != null) {
+  //         // Handle the data as needed
+
+  //         print('Quiznum: ${values!["Quiznum"]}');
+  //         print('Correct: ${values!["Quiz1"]["Colorblindness"]["correct"]}');
+  //         print(
+  //             'Incorrect: ${values!["Quiz1"]["Colorblindness"]["incorrect"]}');
+  //       } else {
+  //         print("Snapshot value is null");
+  //       }
+  //     } else {
+  //       print("Snapshot value is null or not in the expected format");
+  //     }
+  //   } else {
+  //     // No user is signed in
+  //     print('No user signed in');
+  //   }
+  // }
+
   Future<void> _initializeData() async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -75,15 +109,16 @@ class _homereport2State extends State<homereport2> {
       // Read the updated data
       DataSnapshot snapshot = await ref.once().then((event) => event.snapshot);
       if (snapshot.value != null && snapshot.value is Map) {
-        // values = snapshot.value as Map<dynamic, dynamic>;
-        values = snapshot.value as Map<dynamic, dynamic>;
+        Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
         if (values != null) {
-          // Handle the data as needed
+          List<MapEntry<dynamic, dynamic>> entries = values.entries.toList();
+          // Now 'entries' contains a list of key-value pairs
+          // You can use this list in a ListView.builder
 
-          print('Quiznum: ${values!["Quiznum"]}');
-          print('Correct: ${values!["Quiz1"]["Colorblindness"]["correct"]}');
-          print(
-              'Incorrect: ${values!["Quiz1"]["Colorblindness"]["incorrect"]}');
+          print('Entries:');
+          for (var entry in entries) {
+            print('${entry.key}: ${entry.value}');
+          }
         } else {
           print("Snapshot value is null");
         }
