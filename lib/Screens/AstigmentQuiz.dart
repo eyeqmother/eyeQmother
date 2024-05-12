@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:eyeqmother/Screens/Colorblind.dart';
+import 'package:eyeqmother/Screens/SenelenQuiz.dart';
 import 'package:eyeqmother/Screens/report.dart';
 import 'package:eyeqmother/Screens/report1.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:eyeqmother/Screens/report2.dart';
@@ -13,6 +16,9 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'package:percent_indicator/percent_indicator.dart';
+
+late List<String> dataList = [];
+late List<String> dataList1 = [];
 
 class AstigquizWidget extends StatefulWidget {
   final int screen;
@@ -469,6 +475,27 @@ class _AstigquizWidgetState extends State<AstigquizWidget>
                           TransitionUtils.navigateWithAnimation(
                               context, AstigquizWidget(screen: screen));
                         } else {
+                          User? user = FirebaseAuth.instance.currentUser;
+
+                          if (user != null) {
+                            // User is signed in
+                            String uid = user.uid;
+                            print('User ID: $uid');
+
+                            DatabaseReference ref =
+                                FirebaseDatabase.instance.ref(user.uid);
+
+                            dbRef = FirebaseDatabase.instance
+                                .ref(user.uid)
+                                .child('AstigmatismQuiz');
+                            Map<String, String> students = {
+                              'correct': dataList.toString(),
+                              'incorrect': dataList1.toString(),
+                            };
+
+                            dbRef.push().set(students);
+                          }
+
                           TransitionUtils.navigateWithAnimation(context,
                               report1(data: dataList, data1: dataList1));
                         }

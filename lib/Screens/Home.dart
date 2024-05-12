@@ -414,7 +414,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               TransitionUtils.navigateWithAnimation1(
                                 context,
                                 ColorblindWidget(
-                                  screen: 1,
+                                  screen: 0,
                                 ),
                               );
                             },

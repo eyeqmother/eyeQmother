@@ -1,8 +1,7 @@
-import 'package:eyeqmother/Screens/AstigmentQuiz.dart';
-import 'package:eyeqmother/Screens/Colorblind.dart';
-import 'package:eyeqmother/Screens/Far_near.dart';
-import 'package:eyeqmother/Screens/ReportExers.dart';
+import 'package:eyeqmother/Screens/homereport3.dart';
+import 'package:eyeqmother/Screens/homereport4.dart';
 import 'package:eyeqmother/Screens/reporthome1.dart';
+import 'package:get/get.dart';
 
 import '../components/page_transmission.dart';
 import '../resources/app_images.dart';
@@ -340,9 +339,8 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              // Add the navigation logic here
-                              // TransitionUtils.navigateWithAnimation1(
-                              //     context, const ColorblindWidget());
+                              TransitionUtils.navigateWithAnimation1(
+                                  context, reporthome3());
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(4),
@@ -464,8 +462,8 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              // TransitionUtils.navigateWithAnimation1(
-                              //     context, const AstigquizWidget());
+                              TransitionUtils.navigateWithAnimation1(
+                                  context, rep4());
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(4),

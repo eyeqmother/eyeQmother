@@ -178,6 +178,7 @@
 // }
 
 import 'package:eyeqmother/Screens/forger.dart';
+import 'package:eyeqmother/Screens/login_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:eyeqmother/Screens/Home.dart';
@@ -466,7 +467,12 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                               await FirebaseAuth.instance
                                                   .sendPasswordResetEmail(
                                                       email: email);
-                                              Navigator.of(context).pop();
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginWidget()),
+                                              );
                                             } catch (e) {
                                               print(
                                                   "Error sending password reset email: $e");

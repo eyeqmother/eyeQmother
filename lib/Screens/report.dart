@@ -76,7 +76,6 @@ class _ReportWidgetState extends State<ReportWidget>
 
     matchingCount = 0;
     calculateMatchingCount();
-    //_initializeData();
   }
 
   void calculateMatchingCount() {
@@ -85,26 +84,26 @@ class _ReportWidgetState extends State<ReportWidget>
 
     // print(widget.data1.length);
 
-    if (widget.data.length >= 10 && widget.data1.length >= 10) {
-      // last10Data = widget.data.sublist(widget.data.length - 10);
-      // last10Data1 = widget.data1.sublist(widget.data1.length - 10);
+    // if (widget.data.length >= 10 && widget.data1.length >= 10) {
+    // last10Data = widget.data.sublist(widget.data.length - 10);
+    // last10Data1 = widget.data1.sublist(widget.data1.length - 10);
 
-      for (int i = 0; i < widget.data.length; i++) {
-        if (widget.data[i] == widget.data1[i]) {
-          matchResult.add("C"); // "C" for match
-          colorResult.add(Colors.green);
-          corrincorr.add("correct");
-          matchingCount++;
-        } else {
-          matchResult.add("W"); // "W" for mismatch
-          colorResult.add(Colors.red);
-          corrincorr.add("incorrect");
-        }
+    for (int i = 0; i < widget.data.length; i++) {
+      if (widget.data[i] == widget.data1[i]) {
+        matchResult.add("C"); // "C" for match
+        colorResult.add(Colors.green);
+        corrincorr.add("correct");
+        matchingCount++;
+      } else {
+        matchResult.add("W"); // "W" for mismatch
+        colorResult.add(Colors.red);
+        corrincorr.add("incorrect");
       }
-    } else {
-      print("Lists do not have at least 10 elements.");
-      // Handle case where lists do not have at least 10 elements
     }
+    // } else {
+    //   print("Lists do not have at least 10 elements.");
+    //   // Handle case where lists do not have at least 10 elements
+    // }
 
     // Print or debug here to verify the contents of matchResult and colorResult
     print("matchResult: $matchResult");

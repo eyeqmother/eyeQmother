@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:eyeqmother/resources/app_images.dart';
 
-class sideshifting extends StatefulWidget {
+class EyeRolling extends StatefulWidget {
   @override
-  State<sideshifting> createState() => _sideshiftingState();
+  State<EyeRolling> createState() => _EyeRollingState();
 }
 
-class _sideshiftingState extends State<sideshifting> {
+class _EyeRollingState extends State<EyeRolling> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -49,7 +49,7 @@ class _sideshiftingState extends State<sideshifting> {
                         const Padding(
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Text(
-                            'Exercises 2',
+                            'Exercises 4',
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
                               color: Colors.white,
@@ -82,7 +82,7 @@ class _sideshiftingState extends State<sideshifting> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Sideshifting',
+                      'Eye Rolling Exercise',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontFamily: 'Readex Pro',
@@ -101,8 +101,8 @@ class _sideshiftingState extends State<sideshifting> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.sizeOf(context).width * 0.9,
-                    height: MediaQuery.sizeOf(context).height * 1,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height * 1,
                     decoration: BoxDecoration(
                         // color: FlutterFlowTheme.of(context).secondaryBackground,
                         ),
@@ -112,8 +112,18 @@ class _sideshiftingState extends State<sideshifting> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                           child: Text(
-                            //  '1). Sit comfortably: Sit in a comfortable position with your back straight and your shoulders relaxed.',
-                            '1.	Sit or stand comfortably: Make sure you are in a relaxed position with your head facing forward.',
+                            '1). Sit comfortably: Find a comfortable chair and sit up straight with your shoulders relaxed.',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          child: Text(
+                            '2). Take a deep breath: Inhale deeply through your nose, and exhale slowly through your mouth. Relax your facial muscles as you do this.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
@@ -124,8 +134,7 @@ class _sideshiftingState extends State<sideshifting> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                           child: Text(
-                            //' 2.	Focus on your thumb: Focus your eyes on your thumb and make sure its clear and sharp.',
-                            '2.	Focus straight ahead: Choose a specific point directly in front of you to focus on.',
+                            '3). Roll your eyes slowly: Start by looking straight ahead. Then, without moving your head, slowly look up towards the ceiling. Hold this position for a few seconds.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
@@ -136,8 +145,29 @@ class _sideshiftingState extends State<sideshifting> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                           child: Text(
-                            '3.	Without moving your head, look as far as you can to the right: Try to see as far as you can without straining. Hold this position for a few seconds.',
-                            // 'Start sideshifting: Slowly bring your thumb closer to your nose while keeping it in focus. Continue to focus on your thumb as it gets closer.',
+                            '4). Continue rolling: Now, slowly roll your eyes to the right, so you\'re looking towards your right shoulder. Hold for a few seconds.',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          child: Text(
+                            '5). Roll down: Next, roll your eyes down, so you\'re looking towards the floor. Hold for a few seconds.',
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          child: Text(
+                            '6). Roll to the left: Finally, roll your eyes to the left, so you\'re looking towards your left shoulder. Hold for a few seconds.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
@@ -148,8 +178,7 @@ class _sideshiftingState extends State<sideshifting> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                           child: Text(
-                            '4.	Slowly bring your gaze back to the center: Take a moment to relax your eyes.',
-                            //'Hold for a moment: Hold your thumb at the closest point where you can still keep it in focus.',
+                            '7). Repeat: Repeat this sequence a few times, always moving your eyes slowly and smoothly.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
@@ -160,8 +189,7 @@ class _sideshiftingState extends State<sideshifting> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                           child: Text(
-                            '5.	Now, look as far as you can to the left: Again, hold this position for a few seconds.',
-                            //'Zoom out: Slowly move your thumb back to arms length while keeping it in focus.',
+                            '8). Reverse the direction: After you\'ve done a few rounds in one direction, reverse the direction. Start by looking up, then to the left, down, and finally to the right.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
@@ -172,8 +200,7 @@ class _sideshiftingState extends State<sideshifting> {
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                           child: Text(
-                            '6.	Bring your gaze back to the center: Take a moment to relax.',
-                            //'6).Repeat: Repeat this process several times, focusing on keeping your thumb clear and sharp as you zoom in and out.',
+                            '9). Rest: After you\'ve completed several repetitions in both directions, close your eyes and take a few deep breaths to relax your eye muscles.',
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontFamily: 'Readex Pro',

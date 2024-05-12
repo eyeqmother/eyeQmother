@@ -1,10 +1,13 @@
 import 'package:eyeqmother/Exercises/2020rule.dart';
 import 'package:eyeqmother/Exercises/Blinking.dart';
 import 'package:eyeqmother/Exercises/Exercises.dart';
+import 'package:eyeqmother/Exercises/EyeRolling,dart';
 import 'package:eyeqmother/Exercises/figure8s.dart';
+import 'package:eyeqmother/Exercises/focushifting.dart';
 import 'package:eyeqmother/Exercises/sideshifting.dart';
 import 'package:eyeqmother/Exercises/zooming.dart';
 import 'package:eyeqmother/Screens/Exersize1.dart';
+import 'package:eyeqmother/Screens/focusshifting.dart';
 
 import '../components/page_transmission.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -143,7 +146,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                       children: [
                         FFButtonWidget(
                           onPressed: () {
-                            TransitionUtils.navigateWithAnimation(
+                            TransitionUtils.navigateWithAnimation1(
                                 context, ExersizeWidget11());
                           },
                           text: 'Palming Exercise',
@@ -172,7 +175,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
-                            TransitionUtils.navigateWithAnimation(
+                            TransitionUtils.navigateWithAnimation1(
                                 context, sideshifting());
                           },
                           text: 'Sideways Viewing',
@@ -212,7 +215,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
-                        TransitionUtils.navigateWithAnimation(
+                        TransitionUtils.navigateWithAnimation1(
                             context, rule20());
                       },
                       text: '20-20-20 Rule',
@@ -239,6 +242,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
+                        TransitionUtils.navigateWithAnimation1(
+                            context, EyeRolling());
                       },
                       text: 'Eye Rolling',
                       options: FFButtonOptions(
@@ -296,7 +301,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
-                            TransitionUtils.navigateWithAnimation(
+                            TransitionUtils.navigateWithAnimation1(
                                 context, Blinking());
                           },
                           text: 'Blinking Exercise',
@@ -325,7 +330,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
-                            TransitionUtils.navigateWithAnimation(
+                            TransitionUtils.navigateWithAnimation1(
                                 context, Zooming());
                           },
                           text: 'Zooming',
@@ -390,7 +395,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
-                        TransitionUtils.navigateWithAnimation(
+                        TransitionUtils.navigateWithAnimation1(
                             context, figre8());
                       },
                       text: 'Figure 8s',
@@ -426,6 +431,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
+                        TransitionUtils.navigateWithAnimation1(
+                            context, Focusshifting());
                       },
                       text: 'DIY Eye Massage',
                       options: FFButtonOptions(
@@ -446,10 +453,14 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
+                      showLoadingIndicator: false,
                     ),
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
+
+                        TransitionUtils.navigateWithAnimation1(
+                            context, Focusshifitg1());
                       },
                       text: 'Focus Shifting',
                       options: FFButtonOptions(

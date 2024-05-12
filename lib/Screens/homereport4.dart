@@ -1,18 +1,19 @@
 import 'package:eyeqmother/Screens/report.dart';
+import 'package:eyeqmother/Screens/report1.dart';
 import 'package:eyeqmother/resources/app_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
-class homereport2 extends StatefulWidget {
-  const homereport2({Key? key}) : super(key: key);
+class rep4 extends StatefulWidget {
+  const rep4({Key? key}) : super(key: key);
 
   @override
-  State<homereport2> createState() => _homereport2State();
+  State<rep4> createState() => _rep4State();
 }
 
-class _homereport2State extends State<homereport2> {
+class _rep4State extends State<rep4> {
   //   User? user = FirebaseAuth.instance.currentUser;
   // Query dbRef = FirebaseDatabase.instance.ref(user?.uid).child('SenellenQuiz');
   // DatabaseReference reference =
@@ -29,7 +30,7 @@ class _homereport2State extends State<homereport2> {
     user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String uid = user!.uid;
-      dbRef = FirebaseDatabase.instance.ref(uid).child('SenellenQuiz');
+      dbRef = FirebaseDatabase.instance.ref(uid).child('colorbliendQuiz');
     }
   }
 
@@ -55,7 +56,7 @@ class _homereport2State extends State<homereport2> {
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
                     child: Text(
-                      'Snellen Test Reports',
+                      'Astigmatism Test Reports',
                       style: TextStyle(
                         fontFamily: 'Readex Pro',
                         fontSize: 22,
@@ -140,7 +141,7 @@ class _homereport2State extends State<homereport2> {
                         shape: BoxShape.circle,
                       ),
                       child: Image.asset(
-                        'assets/images/Senllen.png',
+                        AppImages().AstigmatismImage,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -198,7 +199,7 @@ class _homereport2State extends State<homereport2> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ReportWidget(
+                            builder: (context) => report1(
                                   data: dataList,
                                   data1: dataList1,
                                 )));

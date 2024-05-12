@@ -226,7 +226,7 @@ class _FarNearWidgetState extends State<FarNearWidget>
                               .forward(from: 0.0));
                     }
 
-                    TransitionUtils.navigateWithAnimation(
+                    TransitionUtils.navigateWithAnimation1(
                         context,
                         SenellenQuizWidget(
                           screen: 1,

@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:eyeqmother/Screens/SenelenQuiz.dart';
 import 'package:eyeqmother/Screens/report.dart';
 import 'package:eyeqmother/Screens/report1.dart';
 import 'package:eyeqmother/resources/app_images.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import '../components/page_transmission.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -364,11 +367,33 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           TransitionUtils.navigateWithAnimation(
                               context, ColorblindWidget(screen: screen));
                         } else {
+                          User? user = FirebaseAuth.instance.currentUser;
+
+                          if (user != null) {
+                            // User is signed in
+                            String uid = user.uid;
+                            print('User ID: $uid');
+
+                            DatabaseReference ref =
+                                FirebaseDatabase.instance.ref(user.uid);
+
+                            dbRef = FirebaseDatabase.instance
+                                .ref(user.uid)
+                                .child('colorbliendQuiz');
+                            Map<String, String> students = {
+                              'correct': dataList.toString(),
+                              'incorrect': dataList1.toString(),
+                            };
+
+                            dbRef.push().set(students);
+                          }
+
                           TransitionUtils.navigateWithAnimation(
                               context,
                               ReportWidget(
-                                  data: dataList,
-                                  data1: dataList1));
+                                data: dataList,
+                                data1: dataList1,
+                              ));
                         }
                       }
                     });
@@ -449,6 +474,4 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
       return 3;
     }
   }
-
-  // Method to add data to the array
 }

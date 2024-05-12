@@ -5,14 +5,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
-class homereport2 extends StatefulWidget {
-  const homereport2({Key? key}) : super(key: key);
+class reporthome3 extends StatefulWidget {
+  const reporthome3({Key? key}) : super(key: key);
 
   @override
-  State<homereport2> createState() => _homereport2State();
+  State<reporthome3> createState() => _reporthome3State();
 }
 
-class _homereport2State extends State<homereport2> {
+class _reporthome3State extends State<reporthome3> {
   //   User? user = FirebaseAuth.instance.currentUser;
   // Query dbRef = FirebaseDatabase.instance.ref(user?.uid).child('SenellenQuiz');
   // DatabaseReference reference =
@@ -29,7 +29,7 @@ class _homereport2State extends State<homereport2> {
     user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       String uid = user!.uid;
-      dbRef = FirebaseDatabase.instance.ref(uid).child('SenellenQuiz');
+      dbRef = FirebaseDatabase.instance.ref(uid).child('colorbliendQuiz');
     }
   }
 
@@ -55,7 +55,7 @@ class _homereport2State extends State<homereport2> {
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
                     child: Text(
-                      'Snellen Test Reports',
+                      'ColorBliend Test Reports',
                       style: TextStyle(
                         fontFamily: 'Readex Pro',
                         fontSize: 22,
@@ -140,7 +140,7 @@ class _homereport2State extends State<homereport2> {
                         shape: BoxShape.circle,
                       ),
                       child: Image.asset(
-                        'assets/images/Senllen.png',
+                        AppImages().Color_bliendness,
                         fit: BoxFit.cover,
                       ),
                     ),

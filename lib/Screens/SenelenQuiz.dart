@@ -99,7 +99,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
   late bool status = false;
   late bool status1 = false;
   double normalizedScreen = 1;
-  int screen = 0;
+  late int screen;
   late String option;
   final random = Random();
   late int randomNumber;
@@ -122,6 +122,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
       int asciiCode2 = 65 + randomIndex2;
       randomLetter2 = String.fromCharCode(asciiCode2);
     });
+
     status = false;
 
     setState(() {
@@ -334,8 +335,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                                 ),
                               ),
                             ),
-                            // Container to add after the 4th row
-                            // Generated code for this Container Widget...
+
                             SizedBox(
                               height:
                                   MediaQuery.of(context).size.height * 0.005,
@@ -615,14 +615,14 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             };
 
                             dbRef.push().set(students);
-
-                            TransitionUtils.navigateWithAnimation(
-                                context,
-                                ReportWidget(
-                                  data: dataList,
-                                  data1: dataList1,
-                                ));
                           }
+
+                          TransitionUtils.navigateWithAnimation(
+                              context,
+                              ReportWidget(
+                                data: dataList,
+                                data1: dataList1,
+                              ));
                         }
                       }
                     });

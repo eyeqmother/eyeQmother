@@ -357,9 +357,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                           0, 0, 0, 5),
                                       child: GestureDetector(
                                         onTap: () {
-                                          TransitionUtils
-                                              .navigateWithAnimation1(
-                                                  context, forget());
+                                          TransitionUtils.navigateWithAnimation(
+                                              context, forget());
                                         },
                                         child: Text(
                                           'Forget password?',
@@ -508,9 +507,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                               0, 20, 0, 12),
                                       child: GestureDetector(
                                         onTap: () {
-                                          TransitionUtils
-                                              .navigateWithAnimation1(context,
-                                                  const SignupWidget());
+                                          TransitionUtils.navigateWithAnimation(
+                                              context, const SignupWidget());
                                         },
                                         child: RichText(
                                           textScaler:

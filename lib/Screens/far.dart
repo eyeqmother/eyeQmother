@@ -205,7 +205,7 @@ class _farState extends State<far> with TickerProviderStateMixin {
                               .forward(from: 0.0));
                     }
 
-                    TransitionUtils.navigateWithAnimation(
+                    TransitionUtils.navigateWithAnimation1(
                         context,
                         SenellenQuizWidget(
                           screen: 1,
