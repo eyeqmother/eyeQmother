@@ -201,6 +201,7 @@ class _homereport2State extends State<homereport2> {
                             builder: (context) => ReportWidget(
                                   data: dataList,
                                   data1: dataList1,
+                                  name1: 'Snellen Test',
                                 )));
                   },
                   child: Padding(

@@ -393,6 +393,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                               ReportWidget(
                                 data: dataList,
                                 data1: dataList1,
+                                name1: 'Color Blindness Test',
                               ));
                         }
                       }

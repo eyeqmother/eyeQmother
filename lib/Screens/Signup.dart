@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class SignupWidget extends StatefulWidget {
   const SignupWidget({Key? key}) : super(key: key);
@@ -26,7 +27,9 @@ class _SignupWidgetState extends State<SignupWidget>
   late TextEditingController passwordController;
   bool passwordVisibility = false;
   bool checkboxValue = true;
-
+  late final String codeDigits;
+  String tokenPhone = "";
+  late String dialCodeDigits;
   late bool _showSpinner = true;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
@@ -81,6 +84,7 @@ class _SignupWidgetState extends State<SignupWidget>
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       child: Scaffold(
         key: scaffoldKey,
@@ -344,7 +348,68 @@ class _SignupWidgetState extends State<SignupWidget>
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 30, 0, 0),
+                                        0, 5, 0, 5),
+                                    child: Text(
+                                      'Phone Number',
+                                      style: TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        letterSpacing: 0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, screenHeight * 0.01, 0, 0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: IntlPhoneField(
+                                        decoration: InputDecoration(
+                                          labelText: '   Phone Number',
+                                          labelStyle: const TextStyle(
+                                            fontFamily: 'Readex Pro',
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFF57636C),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFF4B39EF),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          focusedErrorBorder:
+                                              const OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFF4B39EF),
+                                              width: 2,
+                                            ),
+                                          ),
+                                          filled: true,
+                                          fillColor:
+                                              Colors.grey.withOpacity(0.1),
+                                        ),
+                                        initialCountryCode: 'PK',
+                                        onChanged: (phone) {
+                                          sendPhoneNumberToServer(
+                                              phone.completeNumber,
+                                              phone.countryCode);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 10, 0, 0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
@@ -406,7 +471,7 @@ class _SignupWidgetState extends State<SignupWidget>
                                   Padding(
                                     padding:
                                         const EdgeInsetsDirectional.fromSTEB(
-                                            0, 35, 0, 0),
+                                            0, 20, 0, 0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
                                         if (animationsMap[
@@ -428,7 +493,8 @@ class _SignupWidgetState extends State<SignupWidget>
                                                 .isEmpty ||
                                             passwordController.text
                                                 .trim()
-                                                .isEmpty) {
+                                                .isEmpty ||
+                                            tokenPhone.toString().isEmpty) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
@@ -437,63 +503,80 @@ class _SignupWidgetState extends State<SignupWidget>
                                             ),
                                           );
                                         } else {
-                                          try {
-                                            final credential = await FirebaseAuth
-                                                .instance
-                                                .createUserWithEmailAndPassword(
-                                              email: emailAddressController.text
-                                                  .trim(),
-                                              password: passwordController.text
-                                                  .trim(),
-                                            );
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      OtpWidget(
+                                                        phone: tokenPhone,
+                                                        codeDigits:
+                                                            dialCodeDigits,
+                                                        email:
+                                                            emailAddressController
+                                                                .text
+                                                                .trim(),
+                                                        password:
+                                                            passwordController
+                                                                .text
+                                                                .trim(),
+                                                      )));
+                                          // try {
 
-                                            if (credential.user != null) {
-                                              print('Signup successful');
-                                              // Navigate to OTP widget or other destination
-                                              TransitionUtils
-                                                  .navigateWithAnimation(
-                                                      context,
-                                                      const HomeWidget());
-                                            }
-                                          } on FirebaseAuthException catch (e) {
-                                            String errorMessage;
+                                          //   final credential = await FirebaseAuth
+                                          //       .instance
+                                          //       .createUserWithEmailAndPassword(
+                                          //     email: emailAddressController.text
+                                          //         .trim(),
+                                          //     password: passwordController.text
+                                          //         .trim(),
+                                          //   );
 
-                                            switch (e.code) {
-                                              case 'weak-password':
-                                                errorMessage =
-                                                    'The password provided is too weak.';
-                                                break;
-                                              case 'email-already-in-use':
-                                                errorMessage =
-                                                    'The account already exists for that email.';
-                                                break;
-                                              case 'invalid-email':
-                                                errorMessage =
-                                                    'The email address is malformed.';
-                                                break;
-                                              default:
-                                                errorMessage =
-                                                    'An error occurred: ${e.message}';
-                                            }
+                                          //   if (credential.user != null) {
+                                          //     print('Signup successful');
+                                          //     // Navigate to OTP widget or other destination
+                                          //     TransitionUtils
+                                          //         .navigateWithAnimation(
+                                          //             context,
+                                          //             const HomeWidget());
+                                          //   }
+                                          // } on FirebaseAuthException catch (e) {
+                                          //   String errorMessage;
 
-                                            print(errorMessage);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(errorMessage),
-                                              ),
-                                            );
-                                          } catch (e) {
-                                            print(
-                                                'An unexpected error occurred: $e');
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'An unexpected error occurred.'),
-                                              ),
-                                            );
-                                          }
+                                          //   switch (e.code) {
+                                          //     case 'weak-password':
+                                          //       errorMessage =
+                                          //           'The password provided is too weak.';
+                                          //       break;
+                                          //     case 'email-already-in-use':
+                                          //       errorMessage =
+                                          //           'The account already exists for that email.';
+                                          //       break;
+                                          //     case 'invalid-email':
+                                          //       errorMessage =
+                                          //           'The email address is malformed.';
+                                          //       break;
+                                          //     default:
+                                          //       errorMessage =
+                                          //           'An error occurred: ${e.message}';
+                                          //   }
+
+                                          //   print(errorMessage);
+                                          //   ScaffoldMessenger.of(context)
+                                          //       .showSnackBar(
+                                          //     SnackBar(
+                                          //       content: Text(errorMessage),
+                                          //     ),
+                                          //   );
+                                          // } catch (e) {
+                                          //   print(
+                                          //       'An unexpected error occurred: $e');
+                                          //   ScaffoldMessenger.of(context)
+                                          //       .showSnackBar(
+                                          //     SnackBar(
+                                          //       content: Text(
+                                          //           'An unexpected error occurred.'),
+                                          //     ),
+                                          //   );
+                                          // }
                                         }
                                       },
                                       text: 'Sign Up',
@@ -584,5 +667,10 @@ class _SignupWidgetState extends State<SignupWidget>
         ),
       ),
     );
+  }
+
+  void sendPhoneNumberToServer(String completeNumber, String countryCode) {
+    tokenPhone = completeNumber;
+    dialCodeDigits = countryCode;
   }
 }

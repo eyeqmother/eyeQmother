@@ -18,8 +18,9 @@ export 'report_model.dart';
 class ReportWidget extends StatefulWidget {
   List<dynamic> data;
   List<dynamic> data1;
+  String name1;
 
-  ReportWidget({required this.data, required this.data1});
+  ReportWidget({required this.data, required this.data1, required this.name1});
 
   @override
   State<ReportWidget> createState() => _ReportWidgetState();
@@ -166,11 +167,11 @@ class _ReportWidgetState extends State<ReportWidget>
                               ),
                             ),
                           ),
-                          const Padding(
+                          Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
                             child: Text(
-                              'Results of Snellen Chart',
+                              'Results of ${widget.name1}',
                               style: TextStyle(
                                 fontFamily: 'Readex Pro',
                                 color: Colors.white,

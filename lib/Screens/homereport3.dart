@@ -201,6 +201,7 @@ class _reporthome3State extends State<reporthome3> {
                             builder: (context) => ReportWidget(
                                   data: dataList,
                                   data1: dataList1,
+                                  name1: 'ColorBliend Test Reports',
                                 )));
                   },
                   child: Padding(

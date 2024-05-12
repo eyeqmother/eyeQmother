@@ -622,6 +622,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                               ReportWidget(
                                 data: dataList,
                                 data1: dataList1,
+                                name1: 'Senellen Test',
                               ));
                         }
                       }

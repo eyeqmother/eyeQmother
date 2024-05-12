@@ -1,19 +1,29 @@
-import 'package:flutter/scheduler.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:eyeqmother/Screens/Home.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:eyeqmother/flutter_flow/flutter_flow_widgets.dart';
 import 'package:eyeqmother/flutter_flow/flutter_flow_animations.dart';
-
 import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow_model.dart';
 import '../resources/app_images.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:flutter/material.dart';
-
+import 'package:eyeqmother/Screens/Home.dart';
 import 'otpmodel.dart';
 
 class OtpWidget extends StatefulWidget {
-  const OtpWidget({super.key});
+  final String phone;
+  final String codeDigits;
+  final String email;
+  final String password;
+
+  const OtpWidget({
+    required this.phone,
+    required this.codeDigits,
+    required this.email,
+    required this.password,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<OtpWidget> createState() => _OtpWidgetState();
@@ -21,6 +31,9 @@ class OtpWidget extends StatefulWidget {
 
 class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
   late OtpModel _model;
+
+  String? verificationCode;
+  String Pin1 = '';
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
@@ -53,10 +66,18 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
     ),
   };
 
+  late Timer _timer;
+  int _start = 60; // Initial timer value in seconds
+  bool _timerExpired = false;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     _model = createModel(context, () => OtpModel());
     super.initState();
+    VerifyPhoneNumber();
+    _startTimer(); // Start the timer when the screen initializes
 
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -69,8 +90,108 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
   @override
   void dispose() {
     _model.dispose();
-
+    _timer.cancel(); // Cancel the timer when the screen is disposed
     super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (_start == 0) {
+        setState(() {
+          _timerExpired = true;
+          timer.cancel(); // Stop the timer when it reaches 0
+        });
+      } else {
+        setState(() {
+          _start--;
+        });
+      }
+    });
+  }
+
+  Future<void> _registerUser() async {
+    try {
+      // Create user with email and password
+      final credential = await _auth.createUserWithEmailAndPassword(
+        email: widget.email.trim(),
+        password: widget.password.trim(),
+      );
+
+      if (credential.user != null) {
+        print('Signup successful');
+        // Navigate to OTP widget or other destination
+        TransitionUtils.navigateWithAnimation(
+          context,
+          const HomeWidget(),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+
+      switch (e.code) {
+        case 'weak-password':
+          errorMessage = 'The password provided is too weak.';
+          break;
+        case 'email-already-in-use':
+          errorMessage = 'The account already exists for that email.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'The email address is malformed.';
+          break;
+        default:
+          errorMessage = 'An error occurred: ${e.message}';
+      }
+
+      print(errorMessage);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+        ),
+      );
+    } catch (e) {
+      print('An unexpected error occurred: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('An unexpected error occurred.'),
+        ),
+      );
+    }
+  }
+
+  VerifyPhoneNumber() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '${widget.codeDigits + widget.phone}',
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((value) {
+          if (value.user != null) {
+            _registerUser();
+          }
+        });
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.message.toString()),
+            duration: Duration(seconds: 10),
+          ),
+        );
+      },
+      codeSent: (String vID, int? resentToken) {
+        setState(() {
+          verificationCode = vID;
+        });
+      },
+      codeAutoRetrievalTimeout: (String vID) {
+        setState(() {
+          verificationCode = vID;
+        });
+      },
+      timeout: Duration(
+        seconds: 60,
+      ),
+    );
   }
 
   @override
@@ -94,8 +215,8 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
                       AppImages().otp,
-                      width: MediaQuery.sizeOf(context).width * 0.85,
-                      height: MediaQuery.sizeOf(context).height * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      height: MediaQuery.of(context).size.height * 0.35,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -104,8 +225,8 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
               Align(
                 alignment: const AlignmentDirectional(0, 1),
                 child: Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  height: MediaQuery.sizeOf(context).height * 0.45,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.45,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -194,13 +315,15 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                             selectedFillColor: Colors.black,
                           ),
                           controller: _model.pinCodeController,
-                          onChanged: (_) {},
+                          onChanged: (pin) {
+                            Pin1 = pin;
+                          },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: _model.pinCodeControllerValidator
                               .asValidator(context),
                         ),
                       ),
-                      const Row(
+                      Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -219,8 +342,8 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       5, 0, 0, 0),
                                   child: Text(
-                                    '01:00',
-                                    style: TextStyle(
+                                    _timerExpired ? '00:00' : '00:$_start',
+                                    style: const TextStyle(
                                       fontFamily: 'Readex Pro',
                                       fontSize: 12,
                                       letterSpacing: 0,
@@ -237,12 +360,29 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Resend OTP',
-                                  style: TextStyle(
-                                    fontFamily: 'Readex Pro',
-                                    fontSize: 12,
-                                    letterSpacing: 0,
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (_timerExpired) {
+                                      _start =
+                                          60; // Reset timer when Resend OTP is pressed
+                                      _timerExpired = false;
+                                      _startTimer(); // Start the timer again
+                                      // Resend OTP
+
+                                      VerifyPhoneNumber();
+                                    }
+                                  },
+                                  child: Text(
+                                    'Resend OTP',
+                                    style: TextStyle(
+                                      fontFamily: 'Readex Pro',
+                                      fontSize: 12,
+                                      letterSpacing: 0,
+                                      color: _timerExpired
+                                          ? Colors.red
+                                          : Colors
+                                              .black, // Highlight the button if timer is expired
+                                    ),
                                   ),
                                 ),
                               ],
@@ -254,25 +394,10 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 0),
                         child: FFButtonWidget(
-                          onPressed: () async {
-                            if (animationsMap[
-                                    'buttonOnActionTriggerAnimation'] !=
-                                null) {
-                              setState(() => hasButtonTriggered = true);
-
-                              SchedulerBinding.instance.addPostFrameCallback(
-                                  (_) async => await animationsMap[
-                                          'buttonOnActionTriggerAnimation']!
-                                      .controller
-                                      .forward(from: 0.0));
-                            }
-
-                            TransitionUtils.navigateWithAnimation1(
-                                context, const HomeWidget());
-                          },
+                          onPressed: VerifyPhoneNumber,
                           text: 'Submit',
                           options: FFButtonOptions(
-                            width: MediaQuery.sizeOf(context).width * 0.7,
+                            width: MediaQuery.of(context).size.width * 0.7,
                             height: 44,
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0, 0, 0, 0),
@@ -295,10 +420,12 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                           ),
                           showLoadingIndicator: false,
                         ).animateOnActionTrigger(
-                            animationsMap['buttonOnActionTriggerAnimation']!,
-                            hasBeenTriggered: hasButtonTriggered),
+                          animationsMap['buttonOnActionTriggerAnimation']!,
+                          hasBeenTriggered: hasButtonTriggered,
+                        ),
                       ).animateOnPageLoad(
-                          animationsMap['buttonOnPageLoadAnimation']!),
+                        animationsMap['buttonOnPageLoadAnimation']!,
+                      ),
                     ],
                   ),
                 ),

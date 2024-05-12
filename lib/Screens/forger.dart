@@ -421,6 +421,7 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                         keyboardType:
                                             TextInputType.emailAddress,
                                         // validator: _model
+
                                         //     .emailAddressControllerValidator
                                         //     .asValidator(context),
                                         onChanged: (value) {
