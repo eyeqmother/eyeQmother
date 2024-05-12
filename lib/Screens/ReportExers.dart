@@ -1,3 +1,9 @@
+import 'package:eyeqmother/Exercises/2020rule.dart';
+import 'package:eyeqmother/Exercises/Blinking.dart';
+import 'package:eyeqmother/Exercises/Exercises.dart';
+import 'package:eyeqmother/Exercises/figure8s.dart';
+import 'package:eyeqmother/Exercises/sideshifting.dart';
+import 'package:eyeqmother/Exercises/zooming.dart';
 import 'package:eyeqmother/Screens/Exersize1.dart';
 
 import '../components/page_transmission.dart';
@@ -138,7 +144,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         FFButtonWidget(
                           onPressed: () {
                             TransitionUtils.navigateWithAnimation(
-                                context, const Exersize1Widget());
+                                context, ExersizeWidget11());
                           },
                           text: 'Palming Exercise',
                           options: FFButtonOptions(
@@ -166,6 +172,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
+                            TransitionUtils.navigateWithAnimation(
+                                context, sideshifting());
                           },
                           text: 'Sideways Viewing',
                           options: FFButtonOptions(
@@ -204,6 +212,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
+                        TransitionUtils.navigateWithAnimation(
+                            context, rule20());
                       },
                       text: '20-20-20 Rule',
                       options: FFButtonOptions(
@@ -286,6 +296,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
+                            TransitionUtils.navigateWithAnimation(
+                                context, Blinking());
                           },
                           text: 'Blinking Exercise',
                           options: FFButtonOptions(
@@ -308,10 +320,13 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
+                          showLoadingIndicator: false,
                         ),
                         FFButtonWidget(
                           onPressed: () {
                             print('Button pressed ...');
+                            TransitionUtils.navigateWithAnimation(
+                                context, Zooming());
                           },
                           text: 'Zooming',
                           options: FFButtonOptions(
@@ -334,6 +349,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
+                          showLoadingIndicator: false,
                         ),
                       ],
                     ),
@@ -369,10 +385,13 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
+                      showLoadingIndicator: false,
                     ),
                     FFButtonWidget(
                       onPressed: () {
                         print('Button pressed ...');
+                        TransitionUtils.navigateWithAnimation(
+                            context, figre8());
                       },
                       text: 'Figure 8s',
                       options: FFButtonOptions(
@@ -393,6 +412,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
+                      showLoadingIndicator: false,
                     ),
                   ],
                 ),
@@ -450,6 +470,7 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                         ),
                         borderRadius: BorderRadius.circular(20),
                       ),
+                      showLoadingIndicator: false,
                     ),
                   ],
                 ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyeqmother/Screens/Colorblind.dart';
 import 'package:eyeqmother/components/page_transmission.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -73,23 +74,40 @@ class _ReportWidgetState extends State<ReportWidget>
 
     matchingCount = 0;
     calculateMatchingCount();
-    storeString("hello");
+    //_initializeData();
   }
 
-// Function to store a string in Firebase Realtime Database
-  void storeString(String stringValue) {
-    try {
-      // Obtain the user's UID
-      DatabaseReference ref = FirebaseDatabase.instance.ref("users/123");
-
-// Access a child of the current reference
-      DatabaseReference child = ref.child("name");
-
-      print(ref.key); // "123"
-      print(ref.parent!.key); // "users"
-    } catch (e) {
-      print('Error signing up: $e');
+  Future<void> _initializeData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // User is signed in
+      String uid = user.uid;
+      print('User ID: $uid');
+    } else {
+      // No user is signed in
+      print('No user signed in');
     }
+    int num = 0;
+    DatabaseReference ref = FirebaseDatabase.instance.ref(user!.uid);
+
+    DataSnapshot snapshot = await ref.once().then((event) => event.snapshot);
+    if (snapshot.value != null && snapshot.value is Map) {
+      Map<dynamic, dynamic>? values = snapshot.value as Map<dynamic, dynamic>;
+      if (values != null) {
+        // Handle the data as needed
+        int quizNum = int.parse(values["Quiznum"]);
+        num = quizNum + 1;
+        print('Quiznumhellk: ${values["Quiznum"]}');
+      } else {
+        print("Snapshot value is null");
+      }
+    }
+    // Update user data
+    await ref.update({
+      "Quiznum": num.toString(),
+      //"Quiz1/${widget.type}/correct": widget.data,
+      //"/Quiz1/${widget.type}/incorrect": widget.data1,
+    });
   }
 
   void calculateMatchingCount() {

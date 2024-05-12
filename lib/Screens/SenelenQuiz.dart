@@ -689,8 +689,13 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                           TransitionUtils.navigateWithAnimation(
                               context, SenellenQuizWidget(screen: screen));
                         } else {
-                          TransitionUtils.navigateWithAnimation(context,
-                              ReportWidget(data: dataList, data1: dataList1));
+                          TransitionUtils.navigateWithAnimation(
+                              context,
+                              ReportWidget(
+                                data: dataList,
+                                data1: dataList1,
+                               
+                              ));
                         }
                       }
                     });

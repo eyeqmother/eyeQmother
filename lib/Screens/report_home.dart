@@ -2,6 +2,7 @@ import 'package:eyeqmother/Screens/AstigmentQuiz.dart';
 import 'package:eyeqmother/Screens/Colorblind.dart';
 import 'package:eyeqmother/Screens/Far_near.dart';
 import 'package:eyeqmother/Screens/ReportExers.dart';
+import 'package:eyeqmother/Screens/reporthome1.dart';
 
 import '../components/page_transmission.dart';
 import '../resources/app_images.dart';
@@ -216,8 +217,8 @@ class _homereportState extends State<homereport> with TickerProviderStateMixin {
                           ),
                           child: GestureDetector(
                             onTap: () {
-                              // TransitionUtils.navigateWithAnimation1(
-                              //     context, const FarNearWidget());
+                              TransitionUtils.navigateWithAnimation1(
+                                  context, homereport2());
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(4),

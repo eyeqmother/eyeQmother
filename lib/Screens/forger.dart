@@ -443,11 +443,12 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                               () => hasButtonTriggered = true);
 
                                           SchedulerBinding.instance
-                                              .addPostFrameCallback((_) async =>
-                                                  await animationsMap[
-                                                          'buttonOnActionTriggerAnimation']!
-                                                      .controller
-                                                      .forward(from: 0.0));
+                                              .addPostFrameCallback((_) async {
+                                            await animationsMap[
+                                                    'buttonOnActionTriggerAnimation']!
+                                                .controller
+                                                .forward(from: 0.0);
+                                          });
 
                                           String email = emailAddressController
                                               .text
@@ -462,22 +463,13 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                             );
                                           } else {
                                             try {
-                                              // Attempt to sign in with the provided email and a dummy password
-                                              await FirebaseAuth.instance
-                                                  .signInWithEmailAndPassword(
-                                                email: email,
-                                                password:
-                                                    'password', // Use a dummy password to check existence
-                                              );
-                                              // If sign-in is successful, user exists
-                                              // Proceed with your logic (e.g., reset password)
                                               await FirebaseAuth.instance
                                                   .sendPasswordResetEmail(
                                                       email: email);
                                               Navigator.of(context).pop();
                                             } catch (e) {
-                                              // If sign-in fails, user does not exist
-                                              print("Error signing in: $e");
+                                              print(
+                                                  "Error sending password reset email: $e");
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
                                                 SnackBar(
@@ -493,10 +485,10 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 44,
-                                        padding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 0, 0, 0),
-                                        iconPadding: const EdgeInsetsDirectional
-                                            .fromSTEB(0, 0, 0, 0),
+                                        padding: const EdgeInsets.all(
+                                            0), // Removed EdgeInsetsDirectional
+                                        iconPadding: const EdgeInsets.all(
+                                            0), // Removed EdgeInsetsDirectional
                                         color: const Color(0xFF4B39EF),
                                         textStyle: const TextStyle(
                                           fontFamily: 'Plus Jakarta Sans',
@@ -513,12 +505,15 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       showLoadingIndicator: false,
-                                    ).animateOnActionTrigger(
-                                        animationsMap[
-                                            'buttonOnActionTriggerAnimation']!,
-                                        hasBeenTriggered: hasButtonTriggered),
-                                  ).animateOnPageLoad(animationsMap[
-                                      'buttonOnPageLoadAnimation']!),
+                                    )
+                                        .animateOnActionTrigger(
+                                          animationsMap[
+                                              'buttonOnActionTriggerAnimation']!,
+                                          hasBeenTriggered: hasButtonTriggered,
+                                        )
+                                        .animateOnPageLoad(animationsMap[
+                                            'buttonOnPageLoadAnimation']!),
+                                  ),
                                 ],
                               ),
                             ),

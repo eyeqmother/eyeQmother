@@ -364,8 +364,11 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           TransitionUtils.navigateWithAnimation(
                               context, ColorblindWidget(screen: screen));
                         } else {
-                          TransitionUtils.navigateWithAnimation(context,
-                              ReportWidget(data: dataList, data1: dataList1));
+                          TransitionUtils.navigateWithAnimation(
+                              context,
+                              ReportWidget(
+                                  data: dataList,
+                                  data1: dataList1));
                         }
                       }
                     });
