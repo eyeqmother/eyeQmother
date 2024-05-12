@@ -111,14 +111,12 @@ class _homereport2State extends State<homereport2> {
       if (snapshot.value != null && snapshot.value is Map) {
         Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
         if (values != null) {
-          List<MapEntry<dynamic, dynamic>> entries = values.entries.toList();
-          // Now 'entries' contains a list of key-value pairs
-          // You can use this list in a ListView.builder
-
-          print('Entries:');
-          for (var entry in entries) {
-            print('${entry.key}: ${entry.value}');
-          }
+          // Accessing all "correct" values
+          Map<dynamic, dynamic> correctValues = values["correct"];
+          print('All "correct" values:');
+          correctValues.forEach((key, value) {
+            print('$key: $value');
+          });
         } else {
           print("Snapshot value is null");
         }
