@@ -5,11 +5,14 @@ import 'package:eyeqmother/Screens/report.dart';
 import 'package:eyeqmother/components/page_transmission.dart';
 import 'package:eyeqmother/flutter_flow/flutter_flow_animations.dart';
 import 'package:eyeqmother/flutter_flow/flutter_flow_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+late DatabaseReference dbRef;
 late List<String> dataList = [];
 late List<String> dataList1 = [];
 
@@ -23,135 +26,6 @@ class SenellenQuizWidget extends StatefulWidget {
 
 class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     with TickerProviderStateMixin {
-  // final scaffoldKey = GlobalKey<ScaffoldState>();
-  // var hasButtonTriggered = false;
-  // Color firstButtonColor = Colors.white; // Initial color for the first button
-  // Color secondButtonColor = Colors.white; // Initial color for the second button
-  // Color thirdButtonColor = Colors.white; // Initial color for the third button
-
-  // Color firstButtonColortext =
-  //     Color(0xFF4B39EF); // Initial color for the first button
-  // Color secondButtonColortext =
-  //     Color(0xFF4B39EF); // Initial color for the second button
-  // Color thirdButtonColortext =
-  //     Color(0xFF4B39EF); // Initial color for the third button
-
-  // List<String> resultList = []; // Initialize an empty list to store results
-  // int currentIndex = 0; // Initialize a counter for the current index,
-
-  // var option1 = '';
-  // late String randomLetter3;
-  // late String randomLetter2;
-  // final animationsMap = {
-  //   'progressBarOnPageLoadAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onPageLoad,
-  //     effects: [
-  //       FadeEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: 0,
-  //         end: 1,
-  //       ),
-  //       MoveEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: Offset(-50, 0),
-  //         end: Offset(0, 0),
-  //       ),
-  //       ScaleEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: Offset(0.7, 0.7),
-  //         end: Offset(1, 1),
-  //       ),
-  //     ],
-  //   ),
-  //   'buttonOnPageLoadAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onPageLoad,
-  //     applyInitialState: false,
-  //     effects: [
-  //       MoveEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: Offset(0, 0),
-  //         end: Offset(0, 0),
-  //       ),
-  //     ],
-  //   ),
-  //   'buttonOnActionTriggerAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onActionTrigger,
-  //     applyInitialState: false,
-  //     effects: [
-  //       ScaleEffect(
-  //         curve: Curves.elasticOut,
-  //         delay: 30.ms,
-  //         duration: 500.ms,
-  //         begin: Offset(0.7, 1),
-  //         end: Offset(1, 1),
-  //       ),
-  //     ],
-  //   ),
-  // };
-  // late bool status;
-  // late bool status1 = false;
-  // late double normalizedScreen;
-  // int screen = 0;
-  // late String option;
-  // final random = Random();
-  // late int randomNumber;
-
-  // late List<String> dataList = [];
-  // late List<String> dataList1 = [];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // number();
-
-  //   setState(() {
-  //     screen = widget.screen;
-  //     normalizedScreen = screen / 10.0;
-  //     final random3 = Random();
-  //     int randomIndex3 = random3.nextInt(26);
-  //     int asciiCode3 = 65 + randomIndex3;
-  //     randomLetter3 = String.fromCharCode(asciiCode3);
-
-  //     final random2 = Random();
-  //     int randomIndex2 = random2.nextInt(26);
-  //     int asciiCode2 = 65 + randomIndex2;
-  //     randomLetter2 = String.fromCharCode(asciiCode2);
-  //   });
-  //   status = false;
-
-  //   setState(() {
-  //     firstButtonColor = Colors.white;
-  //     secondButtonColor = Colors.white;
-  //     thirdButtonColor = Colors.white;
-
-  //     randomNumber = random.nextInt(3);
-  //   });
-
-  //   setupAnimations(
-  //     animationsMap.values.where((anim) =>
-  //         anim.trigger == AnimationTrigger.onActionTrigger ||
-  //         !anim.applyInitialState),
-  //     this,
-  //   );
-  //   _initializeTextInfoList();
-  //   randomChange();
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   animationsMap.values.forEach((animation) => animation.controller.dispose());
-  // }
-
   var hasButtonTriggered = false;
 
   final List<String> myList = [
@@ -229,7 +103,6 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
   late String option;
   final random = Random();
   late int randomNumber;
-
   @override
   void initState() {
     super.initState();
@@ -272,7 +145,41 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
   @override
   void dispose() {
     animationsMap.values.forEach((animation) => animation.controller.dispose());
+    _initializeData();
     super.dispose();
+  }
+
+  Future<void> _initializeData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // User is signed in
+      String uid = user.uid;
+      print('User ID: $uid');
+    } else {
+      // No user is signed in
+      print('No user signed in');
+    }
+    // int num = 0;
+    DatabaseReference ref = FirebaseDatabase.instance.ref(user!.uid);
+
+    // DataSnapshot snapshot = await ref.once().then((event) => event.snapshot);
+    // if (snapshot.value != null && snapshot.value is Map) {
+    //   Map<dynamic, dynamic>? values = snapshot.value as Map<dynamic, dynamic>;
+    //   if (values != null) {
+    //     // Handle the data as needed
+    //     int quizNum = int.parse(values["Quiznum"]);
+    //     num = quizNum + 1;
+    //     print('Quiznumhellk: ${values["Quiznum"]}');
+    //   } else {
+    //     print("Snapshot value is null");
+    //   }
+    // }
+    // Update user data
+    await ref.update({
+      "Quiznum": num.toString(),
+      //"Quiz1/${widget.type}/correct": widget.data,
+      //"/Quiz1/${widget.type}/incorrect": widget.data1,
+    });
   }
 
   List<List<TextInfo>> _textInfoList = [];
@@ -689,13 +596,33 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                           TransitionUtils.navigateWithAnimation(
                               context, SenellenQuizWidget(screen: screen));
                         } else {
-                          TransitionUtils.navigateWithAnimation(
-                              context,
-                              ReportWidget(
-                                data: dataList,
-                                data1: dataList1,
-                               
-                              ));
+                          User? user = FirebaseAuth.instance.currentUser;
+
+                          if (user != null) {
+                            // User is signed in
+                            String uid = user.uid;
+                            print('User ID: $uid');
+
+                            DatabaseReference ref =
+                                FirebaseDatabase.instance.ref(user.uid);
+
+                            dbRef = FirebaseDatabase.instance
+                                .ref(user.uid)
+                                .child('SenellenQuiz');
+                            Map<String, String> students = {
+                              'correct': dataList.toString(),
+                              'incorrect': dataList1.toString(),
+                            };
+
+                            dbRef.push().set(students);
+
+                            TransitionUtils.navigateWithAnimation(
+                                context,
+                                ReportWidget(
+                                  data: dataList,
+                                  data1: dataList1,
+                                ));
+                          }
                         }
                       }
                     });

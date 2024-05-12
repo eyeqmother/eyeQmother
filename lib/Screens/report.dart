@@ -71,43 +71,12 @@ class _ReportWidgetState extends State<ReportWidget>
       this,
     );
     print("hello");
+    print(widget.data);
+    print(widget.data1);
 
     matchingCount = 0;
     calculateMatchingCount();
     //_initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      // User is signed in
-      String uid = user.uid;
-      print('User ID: $uid');
-    } else {
-      // No user is signed in
-      print('No user signed in');
-    }
-    int num = 0;
-    DatabaseReference ref = FirebaseDatabase.instance.ref(user!.uid);
-
-    DataSnapshot snapshot = await ref.once().then((event) => event.snapshot);
-    if (snapshot.value != null && snapshot.value is Map) {
-      Map<dynamic, dynamic>? values = snapshot.value as Map<dynamic, dynamic>;
-      if (values != null) {
-        // Handle the data as needed
-        int quizNum = int.parse(values["Quiznum"]);
-        num = quizNum + 1;
-        print('Quiznumhellk: ${values["Quiznum"]}');
-      } else {
-        print("Snapshot value is null");
-      }
-    }
-    // Update user data
-    await ref.update({
-      "Quiznum": num.toString(),
-      //"Quiz1/${widget.type}/correct": widget.data,
-      //"/Quiz1/${widget.type}/incorrect": widget.data1,
-    });
   }
 
   void calculateMatchingCount() {
