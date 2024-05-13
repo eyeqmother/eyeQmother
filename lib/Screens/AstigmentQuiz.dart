@@ -213,7 +213,7 @@ class _AstigquizWidgetState extends State<AstigquizWidget>
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(
-                            screen == 1 ? 'Test each eye separately. \n\nCover the eye that you are not using.\n\nKeep the grid at a normal reading distance about 14 inches away.\n\n Look directly at the dot in the center of the grid.\n\nIf you normally wear glasses, do so while looking at the grid If you \nnotice blurry or wavy lines, and dark or blank spots, call your Retina\n Specialist immediately.' :  screen == 2 ? 'Test each eye separately. \n\nCover the eye that you are not using.\n\nKeep the circle at a normal reading distance about 14\ninches away or at your elbow lenght.\n\nLook directly at the center of the circle.\n\nNow select the color of the lines you see, if it is light\ngreyish you may have astigmatism and consult with\ndoctor.' : screen == 3 ?"If all the lines are not uniform and\n some lines look bold or blurry, \nyou may have astigmatism" :  screen == 4 ? "If Pikachu is greeting you, you may suspect astigmatism." : "",
+                            screen == 1 ? 'Test each eye separately. \n\nCover the eye that you are not using.\n\nKeep the grid at a normal reading distance about 14 inches away.\n\n Look directly at the dot in the center of the grid.\n\nNow select the color of the lines you see, if it is light\ngreyish you may have astigmatism and consult with\ndoctor.' :  screen == 2 ? 'Test each eye separately. \n\nCover the eye that you are not using.\n\nKeep the circle at a normal reading distance about 14\ninches away or at your elbow lenght.\n\nNow select the color of the lines you see, if it is light\ngreyish you may have astigmatism and consult with\ndoctor.' : screen == 3 ?"If all the lines are not uniform and\n some lines look bold or blurry, \nyou may have astigmatism" :  screen == 4 ? "If Pikachu is greeting you, you may suspect astigmatism." : "",
                             style: TextStyle(
                               fontFamily: 'Readex Pro',
                               fontSize: 11,
@@ -369,7 +369,7 @@ class _AstigquizWidgetState extends State<AstigquizWidget>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                   child: FFButtonWidget(
                     onPressed: () async {
                       if (animationsMap['buttonOnActionTriggerAnimation'] !=
@@ -392,7 +392,7 @@ class _AstigquizWidgetState extends State<AstigquizWidget>
                             TransitionUtils.navigateWithAnimation(
                                 context, AstigquizWidget(screen: screen));
                           } else {
-                            await updateAstigatismData(userEmail, dataList, dataList1);
+                            await saveAstigmatismData(userEmail, dataList, dataList1);
                             TransitionUtils.navigateWithAnimation(context,
                                 ReportWidget(data: dataList, data1: dataList1, chartName: 'Astigmatism',));
                           }
@@ -433,40 +433,26 @@ class _AstigquizWidgetState extends State<AstigquizWidget>
     );
   }
 
-  Future<void> updateAstigatismData(String email, List<String> list1, List<String> list2) async {
+  Future<void> saveAstigmatismData(String email, List<String> list1, List<String> list2) async {
     // Reference to Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    try {
-      // Query to find the user document by email
-      var querySnapshot = await firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+    // Creating / referencing the document for the specific user by their email
+    DocumentReference userDocRef = firestore.collection('test').doc(email);
 
-      if (querySnapshot.docs.isEmpty) {
-        print('No user found with that email');
-        return;
-      }
+    // Creating / referencing the sub-collection for the Snellen Chart data
+    CollectionReference snellenChartRef = userDocRef.collection('Astigmatism');
 
-      // Assuming email is unique and there's only one document
-      DocumentReference userDocRef = querySnapshot.docs.first.reference;
-
-      // Data to update
-      Map<String, dynamic> dataToUpdate = {
-        'Astigmatism': {
-          'list1': list1,
-          'list2': list2,
-        },
-      };
-
-      // Update the document
-      await userDocRef.update(dataToUpdate);
-      print('Color Blindness data updated successfully!');
-    } catch (e) {
-      print('Error updating Color Blindness data: $e');
-    }
+    // Creating a new document in the Snellen Chart collection
+    return snellenChartRef.add({
+      'list1': list1,
+      'list2': list2,
+      'timestamp': FieldValue.serverTimestamp() // Adding a timestamp if needed
+    }).then((docRef) {
+      print('Document added with ID: ${docRef.id}');
+    }).catchError((error) {
+      print('Error adding document: $error');
+    });
   }
 
 }

@@ -6,6 +6,7 @@ import 'package:eyeqmother/resources/app_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:validators/validators.dart' as validator;
 import '../components/page_transmission.dart';
 import '../userData.dart';
@@ -26,8 +27,11 @@ class SignupWidget extends StatefulWidget {
 
 class _SignupWidgetState extends State<SignupWidget>
     with TickerProviderStateMixin {
-  late TextEditingController emailAddressController;
-  late TextEditingController passwordController;
+  TextEditingController emailAddressController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  PhoneNumber phoneNumber = PhoneNumber();
+  String finalPhoneNumber = "";
   bool passwordVisibility = false;
   bool checkboxValue = true;
 
@@ -247,6 +251,78 @@ class _SignupWidgetState extends State<SignupWidget>
                                       ),
                                     ),
                                   ),
+                                  InternationalPhoneNumberInput(
+                                    onInputChanged: (PhoneNumber number) {
+                                      phoneNumberController.text = phoneNumberController.text.removeFirstZero();
+                                      finalPhoneNumber = number.phoneNumber!;
+
+                                    },
+                                    onInputValidated: (bool value) {
+                                      print(value);
+                                    },
+                                    selectorConfig: SelectorConfig(
+                                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                                      useBottomSheetSafeArea: true,
+                                    ),
+
+                                    inputDecoration: InputDecoration(
+                                      labelText: 'Phone Number',
+                                      labelStyle: TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        color: Color(0xFF57636C),
+                                        fontSize: 16,
+                                        letterSpacing: 0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.black,
+                                          width: 1,
+                                        ),
+                                        borderRadius:
+                                        BorderRadius.circular(12),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFF4B39EF),
+                                          width: 1,
+                                        ),
+                                        borderRadius:
+                                        BorderRadius.circular(12),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFFF5963),
+                                          width: 1,
+                                        ),
+                                        borderRadius:
+                                        BorderRadius.circular(12),
+                                      ),
+                                      focusedErrorBorder:
+                                      OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFFF5963),
+                                          width: 1,
+                                        ),
+                                        borderRadius:
+                                        BorderRadius.circular(12),
+                                      ),
+                                      filled: true,
+                                      fillColor: Color(0xFFF1F4F8),
+                                    ),
+                                    ignoreBlank: false,
+                                    autoValidateMode: AutovalidateMode.disabled,
+                                    selectorTextStyle: TextStyle(color: Colors.black),
+                                    initialValue: phoneNumber,
+                                    textFieldController: phoneNumberController,
+                                    formatInput: true,
+                                    keyboardType:
+                                    TextInputType.numberWithOptions(signed: true, decimal: true),
+                                    inputBorder: OutlineInputBorder(),
+                                    onSaved: (PhoneNumber number) {
+                                      print('On Saved: $number');
+                                    },
+                                  ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 5, 0, 5),
@@ -407,7 +483,7 @@ class _SignupWidgetState extends State<SignupWidget>
                                     child: Center(
                                       child: Container(
                                         width: double.infinity,
-                                        height: 45,
+                                        height: 50,
                                         padding: EdgeInsets.all(10),
                                         margin:
                                         const EdgeInsetsDirectional.fromSTEB(
@@ -449,7 +525,7 @@ class _SignupWidgetState extends State<SignupWidget>
                                                   .isEmpty ||
                                               passwordController.text
                                                   .trim()
-                                                  .isEmpty) {
+                                                  .isEmpty || finalPhoneNumber.trim().isEmpty) {
                                             loading = false;
                                             setState(() {});
                                             ScaffoldMessenger.of(context)
@@ -459,73 +535,120 @@ class _SignupWidgetState extends State<SignupWidget>
                                                     'Please fill in all fields.'),
                                               ),
                                             );
+                                          }else if (passwordController.text.length <6) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Please enter strong password'),
+                                              ),
+                                            );
+                                            loading = false;
+                                            setState(() {});
                                           } else {
-                                            try {
-                                              final credential = await FirebaseAuth
-                                                  .instance
-                                                  .createUserWithEmailAndPassword(
-                                                email: emailAddressController.text
-                                                    .trim(),
-                                                password: passwordController.text
-                                                    .trim(),
-                                              );
+                                            bool value = await isUserDataExists(emailAddressController.text, finalPhoneNumber);
+                                            if(!value){
+                                              try {
+                                                FirebaseAuth _auth =
+                                                    FirebaseAuth.instance;
 
-                                              if (credential.user != null) {
-                                                await storeUserData(emailAddressController.text);
-                                                loading = false;
-                                                setState(() {});
-                                                print('Signup successful');
-                                                userEmail = emailAddressController.text;
-                                                // Navigate to OTP widget or other destination
-                                                TransitionUtils
-                                                    .navigateWithAnimation(
+                                                await _auth.verifyPhoneNumber(
+                                                  phoneNumber: finalPhoneNumber,
+                                                  timeout:
+                                                      Duration(seconds: 60),
+                                                  verificationCompleted:
+                                                      (AuthCredential
+                                                          credential) async {
+
+                                                    loading = false;
+                                                    setState(() {});
+                                                  },
+                                                  verificationFailed:
+                                                      (FirebaseAuthException
+                                                          authException) {
+                                                    loading = false;
+                                                    setState(() {});
+                                                    String errorMessage;
+                                                    switch (
+                                                        authException.code) {
+                                                      case 'invalid-phone-number':
+                                                        errorMessage =
+                                                            'Invalid phone number';
+                                                        break;
+                                                      case 'quota-exceeded':
+                                                        errorMessage =
+                                                            'SMS quota exceeded for the project';
+                                                        break;
+                                                      case 'cancelled':
+                                                        errorMessage =
+                                                            'Verification canceled';
+                                                        break;
+                                                      // Add more cases as needed
+                                                      default:
+                                                        errorMessage =
+                                                            'Verification failed';
+                                                        print(authException.toString());
+                                                        break;
+                                                    }
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      content:
+                                                          Text(errorMessage),
+                                                      duration:
+                                                          Duration(seconds: 3),
+                                                    ));
+                                                  },
+                                                  codeSent: (String
+                                                          verificationId,
+                                                      int? resendToken) async {
+                                                    loading = false;
+                                                    setState(() {});
+                                                    TransitionUtils.navigateWithAnimation1(
                                                         context,
-                                                        const HomeWidget());
+                                                        OtpWidget(
+                                                            email:
+                                                                emailAddressController
+                                                                    .text,
+                                                            phoneNumber:
+                                                                finalPhoneNumber,
+                                                            password:
+                                                                passwordController
+                                                                    .text,
+                                                            verificationId:
+                                                                verificationId));
+                                                    print(
+                                                        'Code sent to $phoneNumber');
+                                                  },
+                                                  codeAutoRetrievalTimeout:
+                                                      (String verificationId) {
+                                                    loading = false;
+                                                    setState(() {});
+                                                    // This callback will be invoked when the auto-retrieval of the OTP times out.
+                                                    // You can use the `verificationId` to manually verify the OTP later.
+                                                  },
+                                                );
+                                              } catch (e) {
+                                                ScaffoldMessenger.of(
+                                                    context)
+                                                    .showSnackBar(SnackBar(
+                                                  content:
+                                                  Text("Error sending in otp"),
+                                                  duration:
+                                                  Duration(seconds: 3),
+                                                ));
                                               }
+                                            }else{
                                               loading = false;
                                               setState(() {});
-                                            } on FirebaseAuthException catch (e) {
-                                              String errorMessage;
-                                              loading = false;
-                                              setState(() {});
-
-                                              switch (e.code) {
-                                                case 'weak-password':
-                                                  errorMessage =
-                                                      'The password provided is too weak.';
-                                                  break;
-                                                case 'email-already-in-use':
-                                                  errorMessage =
-                                                      'The account already exists for that email.';
-                                                  break;
-                                                case 'invalid-email':
-                                                  errorMessage =
-                                                      'The email address is malformed.';
-                                                  break;
-                                                default:
-                                                  errorMessage =
-                                                      'An error occurred: ${e.message}';
-                                              }
-
-                                              print(errorMessage);
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(errorMessage),
-                                                ),
-                                              );
-                                            } catch (e) {
-                                              loading = false;
-                                              setState(() {});
-                                              print(
-                                                  'An unexpected error occurred: $e');
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                      'An unexpected error occurred.'),
-                                                ),
-                                              );
+                                              ScaffoldMessenger.of(
+                                                  context)
+                                                  .showSnackBar(SnackBar(
+                                                content:
+                                                Text("Email/Phone Number is already in use"),
+                                                duration:
+                                                Duration(seconds: 3),
+                                              ));
                                             }
                                           }
                                         },
@@ -619,23 +742,34 @@ class _SignupWidgetState extends State<SignupWidget>
       ),
     );
   }
-  Future<void> storeUserData(String email) async {
-    // Reference to Firestore
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    // Create a new document in 'users' collection with a generated ID
-    DocumentReference docRef = firestore.collection('users').doc();
 
-    // Data structure to store
-    Map<String, dynamic> userData = {
-      'email': email,
-      'Snellen Chart': {},  // Empty map for future data
-      'Color Blindness': {}, // Empty map for future data
-      'Astigmatism': {},     // Empty map for future data
+  Future<bool> isUserDataExists(String email, String phoneNumber) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    };
+      // Create a reference to the user collection
+      CollectionReference users = firestore.collection('users');
 
-    // Store the data
-    await docRef.set(userData);
+      // Query Firestore to check if email exists
+      QuerySnapshot emailQuery = await users.where('email', isEqualTo: email).get();
+
+      // Query Firestore to check if phone number exists
+      QuerySnapshot phoneNumberQuery =
+      await users.where('phone_number', isEqualTo: phoneNumber).get();
+
+      // If email or phone number exists, return true
+      if (emailQuery.docs.isNotEmpty || phoneNumberQuery.docs.isNotEmpty) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error checking user data: $e');
+      return false; // Return false in case of an error
+    }
   }
+
+
+
 }

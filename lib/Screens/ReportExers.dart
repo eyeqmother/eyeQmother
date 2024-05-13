@@ -77,8 +77,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Image.asset(
-                                  'assets/images/image2.png',
-                                  fit: BoxFit.cover,
+                                  'assets/images/applogo.png',
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             ),

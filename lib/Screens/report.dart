@@ -177,8 +177,8 @@ class _ReportWidgetState extends State<ReportWidget>
                                 shape: BoxShape.circle,
                               ),
                               child: Image.asset(
-                                'assets/images/image2.png',
-                                fit: BoxFit.cover,
+                                'assets/images/applogo.png',
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
@@ -292,32 +292,28 @@ class _ReportWidgetState extends State<ReportWidget>
                             child: Container(
                               width: MediaQuery.sizeOf(context).width * 0.9,
                               height: MediaQuery.sizeOf(context).height * 0.11,
-                              decoration: BoxDecoration(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: const BorderRadius.only(
+                                borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(20),
                                   bottomRight: Radius.circular(20),
                                   topLeft: Radius.circular(20),
                                   topRight: Radius.circular(20),
                                 ),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'According to your tests results you need\nto consult with related doctor.Click the\nbutton below to find nearest doctor.',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'Readex Pro',
-                                      letterSpacing: 0,
-                                    ),
-                                  ),
-                                ],
+                              child: Text(
+                                scorePercentage > 60 ? 'Your score is optimal, keep performing exercises and drink plenty of water daily with moderate intake of fruits.' : 'According to your tests results you need\nto consult with related doctor.Click the\nbutton below to find nearest doctor.',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0,
+                                ),
                               ),
                             ),
                           ),
-                          if (scorePercentage > 40) ...{
+                          if (scorePercentage > 60) ...{
                             Padding(
                               padding:
                                   const EdgeInsetsDirectional.fromSTEB(0, 35, 0, 20),

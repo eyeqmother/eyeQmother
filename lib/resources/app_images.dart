@@ -2,7 +2,7 @@ class AppImages {
   var appIcon = "assets/images/splash.png";
   var signuP_login_logo = "assets/images/Group 6356195.png";
   var otp = "assets/images/OTP security.png";
-  var Homeicon = "assets/images/image2.png";
+  var Homeicon = "assets/images/applogo.png";
   var Selen = "assets/images/Selen.png";
 
   var Container_color = "assets/images/Container color.png";

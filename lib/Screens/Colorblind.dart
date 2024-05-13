@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eyeqmother/Screens/report.dart';
-import 'package:eyeqmother/Screens/report1.dart';
-import 'package:eyeqmother/resources/app_images.dart';
 
 import '../components/page_transmission.dart';
 import '../userData.dart';
@@ -32,6 +30,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
   final scaffoldKey = GlobalKey<ScaffoldState>();
   var hasButtonTriggered = false;
   String selectedValue = '';
+  List<String> optionList = <String>["","",""];
 
   final List<String> myList = [
     "7",
@@ -116,16 +115,29 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
     setState(() {
       screen = widget.screen;
       normalizedScreen = screen / 10.0;
-      final random3 = Random();
-      int randomIndex3 = random3.nextInt(26);
-      //  int asciiCode3 = 65 + randomIndex3;
-      randomLetter3 = randomIndex3.toString();
-      ;
-      int randomNumber = random.nextInt(101);
-      final random2 = Random();
-      int randomIndex2 = random2.nextInt(26);
-      // int asciiCode2 = 65 + randomIndex2;
-      randomLetter2 = randomIndex2.toString();
+
+      List<String> randomLetters = [];
+      Random random = Random();
+
+      // Generate random letters until 'count' unique letters are obtained
+      optionList[0] = myList[screen];
+      while (randomLetters.length < 2) {
+        int randomIndex = random.nextInt(99);
+        String randomLetter = randomIndex.toString();
+        print("Option List: ");
+        print(optionList);
+        print("Random Letter: ");
+        print(randomLetter);
+        print("Random Letters: ");
+        print(randomLetters);
+        if (!optionList.contains(randomLetter)) {
+          randomLetters.add(randomLetter);
+        }
+      }
+
+      optionList[1] = randomLetters[0];
+      optionList[2] = randomLetters[1];
+      optionList.shuffle();
     });
     status = false;
 
@@ -235,12 +247,12 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           secondButtonColortext = Color(0xFF4B39EF);
                           firstButtonColortext = Colors.white;
                           thirdButtonColortext = Color(0xFF4B39EF);
-                          selectedValue = myList[screen];
+                          selectedValue = optionList[0];
 
                         });
                         print('First button pressed ...');
                       },
-                      text: myList[screen],
+                      text: optionList[0],
                       options: FFButtonOptions(
                         width: MediaQuery.of(context).size.width * 0.18,
                         height: MediaQuery.of(context).size.height * 0.05,
@@ -272,7 +284,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           firstButtonColortext = Color(0xFF4B39EF);
                           secondButtonColortext = Colors.white;
                           thirdButtonColortext = Color(0xFF4B39EF);
-                          selectedValue = randomLetter3;
+                          selectedValue = optionList[1];
 
                           // dataList.add(myList[screen]);
                           // dataList1.add(randomLetter3);
@@ -281,7 +293,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                         });
                         print('Second button pressed ...');
                       },
-                      text: randomLetter3,
+                      text: optionList[1],
                       options: FFButtonOptions(
                         width: MediaQuery.of(context).size.width * 0.18,
                         height: MediaQuery.of(context).size.height * 0.05,
@@ -313,7 +325,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           secondButtonColortext = Color(0xFF4B39EF);
                           thirdButtonColortext = Colors.white;
                           firstButtonColortext = Color(0xFF4B39EF);
-                          selectedValue = randomLetter2;
+                          selectedValue = optionList[2];
 
                           // dataList.add(myList[screen]);
                           // dataList1.add(randomLetter3);
@@ -322,7 +334,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                         });
                         print('Second button pressed ...');
                       },
-                      text: randomLetter2,
+                      text: optionList[2],
                       options: FFButtonOptions(
                         width: MediaQuery.of(context).size.width * 0.18,
                         height: MediaQuery.of(context).size.height * 0.05,
@@ -371,7 +383,7 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
                           TransitionUtils.navigateWithAnimation(
                               context, ColorblindWidget(screen: screen));
                         } else {
-                          await updateColorBlindnessData(userEmail, dataList, dataList1);
+                          await saveColorBlindnessData(userEmail, dataList, dataList1);
                           TransitionUtils.navigateWithAnimation(context,
                               ReportWidget(data: dataList, data1: dataList1, chartName: 'Color Blind', ));
                         }
@@ -411,40 +423,26 @@ class _ColorblindWidgetState extends State<ColorblindWidget>
     );
   }
 
-  Future<void> updateColorBlindnessData(String email, List<String> list1, List<String> list2) async {
+  Future<void> saveColorBlindnessData(String email, List<String> list1, List<String> list2) async {
     // Reference to Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    try {
-      // Query to find the user document by email
-      var querySnapshot = await firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+    // Creating / referencing the document for the specific user by their email
+    DocumentReference userDocRef = firestore.collection('test').doc(email);
 
-      if (querySnapshot.docs.isEmpty) {
-        print('No user found with that email');
-        return;
-      }
+    // Creating / referencing the sub-collection for the Snellen Chart data
+    CollectionReference snellenChartRef = userDocRef.collection('Color Blindness');
 
-      // Assuming email is unique and there's only one document
-      DocumentReference userDocRef = querySnapshot.docs.first.reference;
-
-      // Data to update
-      Map<String, dynamic> dataToUpdate = {
-        'Color Blindness': {
-          'list1': list1,
-          'list2': list2,
-        },
-      };
-
-      // Update the document
-      await userDocRef.update(dataToUpdate);
-      print('Color Blindness data updated successfully!');
-    } catch (e) {
-      print('Error updating Color Blindness data: $e');
-    }
+    // Creating a new document in the Snellen Chart collection
+    return snellenChartRef.add({
+      'list1': list1,
+      'list2': list2,
+      'timestamp': FieldValue.serverTimestamp() // Adding a timestamp if needed
+    }).then((docRef) {
+      print('Document added with ID: ${docRef.id}');
+    }).catchError((error) {
+      print('Error adding document: $error');
+    });
   }
 
 

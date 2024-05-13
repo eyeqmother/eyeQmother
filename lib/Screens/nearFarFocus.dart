@@ -70,8 +70,8 @@ class _NearFarFocusState extends State<NearFarFocus> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: Image.asset(
-                                  'assets/images/image2.png',
-                                  fit: BoxFit.cover,
+                                  'assets/images/applogo.png',
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             ),

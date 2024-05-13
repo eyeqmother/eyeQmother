@@ -25,137 +25,11 @@ class SenellenQuizWidget extends StatefulWidget {
 
 class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     with TickerProviderStateMixin {
-  // final scaffoldKey = GlobalKey<ScaffoldState>();
-  // var hasButtonTriggered = false;
-  // Color firstButtonColor = Colors.white; // Initial color for the first button
-  // Color secondButtonColor = Colors.white; // Initial color for the second button
-  // Color thirdButtonColor = Colors.white; // Initial color for the third button
-
-  // Color firstButtonColortext =
-  //     Color(0xFF4B39EF); // Initial color for the first button
-  // Color secondButtonColortext =
-  //     Color(0xFF4B39EF); // Initial color for the second button
-  // Color thirdButtonColortext =
-  //     Color(0xFF4B39EF); // Initial color for the third button
-
-  // List<String> resultList = []; // Initialize an empty list to store results
-  // int currentIndex = 0; // Initialize a counter for the current index,
-
-  // var option1 = '';
-  // late String randomLetter3;
-  // late String randomLetter2;
-  // final animationsMap = {
-  //   'progressBarOnPageLoadAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onPageLoad,
-  //     effects: [
-  //       FadeEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: 0,
-  //         end: 1,
-  //       ),
-  //       MoveEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: Offset(-50, 0),
-  //         end: Offset(0, 0),
-  //       ),
-  //       ScaleEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: Offset(0.7, 0.7),
-  //         end: Offset(1, 1),
-  //       ),
-  //     ],
-  //   ),
-  //   'buttonOnPageLoadAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onPageLoad,
-  //     applyInitialState: false,
-  //     effects: [
-  //       MoveEffect(
-  //         curve: Curves.easeInOut,
-  //         delay: 0.ms,
-  //         duration: 600.ms,
-  //         begin: Offset(0, 0),
-  //         end: Offset(0, 0),
-  //       ),
-  //     ],
-  //   ),
-  //   'buttonOnActionTriggerAnimation': AnimationInfo(
-  //     trigger: AnimationTrigger.onActionTrigger,
-  //     applyInitialState: false,
-  //     effects: [
-  //       ScaleEffect(
-  //         curve: Curves.elasticOut,
-  //         delay: 30.ms,
-  //         duration: 500.ms,
-  //         begin: Offset(0.7, 1),
-  //         end: Offset(1, 1),
-  //       ),
-  //     ],
-  //   ),
-  // };
-  // late bool status;
-  // late bool status1 = false;
-  // late double normalizedScreen;
-  // int screen = 0;
-  // late String option;
-  // final random = Random();
-  // late int randomNumber;
-
-  // late List<String> dataList = [];
-  // late List<String> dataList1 = [];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // number();
-
-  //   setState(() {
-  //     screen = widget.screen;
-  //     normalizedScreen = screen / 10.0;
-  //     final random3 = Random();
-  //     int randomIndex3 = random3.nextInt(26);
-  //     int asciiCode3 = 65 + randomIndex3;
-  //     randomLetter3 = String.fromCharCode(asciiCode3);
-
-  //     final random2 = Random();
-  //     int randomIndex2 = random2.nextInt(26);
-  //     int asciiCode2 = 65 + randomIndex2;
-  //     randomLetter2 = String.fromCharCode(asciiCode2);
-  //   });
-  //   status = false;
-
-  //   setState(() {
-  //     firstButtonColor = Colors.white;
-  //     secondButtonColor = Colors.white;
-  //     thirdButtonColor = Colors.white;
-
-  //     randomNumber = random.nextInt(3);
-  //   });
-
-  //   setupAnimations(
-  //     animationsMap.values.where((anim) =>
-  //         anim.trigger == AnimationTrigger.onActionTrigger ||
-  //         !anim.applyInitialState),
-  //     this,
-  //   );
-  //   _initializeTextInfoList();
-  //   randomChange();
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   animationsMap.values.forEach((animation) => animation.controller.dispose());
-  // }
 
   var hasButtonTriggered = false;
   int score = 0;
+
+  List<String> optionList = <String>["","",""];
 
   final List<String> myList = [
     "7",
@@ -240,17 +114,50 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     // number();
 
     setState(() {
+
       screen = widget.screen;
       normalizedScreen = screen / 10.0;
-      final random3 = Random();
-      int randomIndex3 = random3.nextInt(26);
-      int asciiCode3 = 65 + randomIndex3;
-      randomLetter3 = String.fromCharCode(asciiCode3);
+      _initializeTextInfoList();
+      randomChange();
+      //
+      // final random3 = Random();
+      // int randomIndex3 = random3.nextInt(26);
+      // int asciiCode3 = 65 + randomIndex3;
+      // randomLetter3 = String.fromCharCode(asciiCode3);
+      //
+      //
+      // final random2 = Random();
+      // int randomIndex2 = random2.nextInt(26);
+      // int asciiCode2 = 65 + randomIndex2;
+      // randomLetter2 = String.fromCharCode(asciiCode2);
 
-      final random2 = Random();
-      int randomIndex2 = random2.nextInt(26);
-      int asciiCode2 = 65 + randomIndex2;
-      randomLetter2 = String.fromCharCode(asciiCode2);
+
+      List<String> randomLetters = [];
+      Random random = Random();
+
+      // Generate random letters until 'count' unique letters are obtained
+      while (randomLetters.length < 2) {
+        // Generate a random ASCII code for a capital letter
+        int randomIndex = random.nextInt(26);
+        int asciiCode = 65 + randomIndex;
+        String randomLetter = String.fromCharCode(asciiCode);
+        // print("Option List: ");
+        // print(optionList);
+        // print("Random Letter: ");
+        // print(randomLetter);
+        // print("Random Letters: ");
+        // print(randomLetters);
+        // Check if the generated letter is not already in optionList
+        if (!optionList.contains(randomLetter)) {
+          randomLetters.add(randomLetter);
+        }
+      }
+
+      optionList[1] = randomLetters[0];
+      optionList[2] = randomLetters[1];
+      optionList.shuffle();
+
+
     });
     status = false;
 
@@ -268,8 +175,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
           !anim.applyInitialState),
       this,
     );
-    _initializeTextInfoList();
-    randomChange();
+
   }
 
   @override
@@ -283,7 +189,8 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     // Define text information for each row
     _textInfoList = [
       [TextInfo("E", 50.0, Colors.black)],
-      [TextInfo("P ", 45.0, Colors.black), TextInfo(" F", 45.0, Colors.black)],
+      [TextInfo("P ", 45.0, Colors.black),
+        TextInfo(" F", 45.0, Colors.black)],
       [
         TextInfo("T    ", 40.0, Colors.black),
         TextInfo("O   ", 40.0, Colors.black),
@@ -386,7 +293,9 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
       _textInfoList[row][col].color = Colors.red;
       print(_textInfoList[row][col].text);
       option1 = _textInfoList[row][col].text;
-      val = option1.trim();
+      optionList[0] = option1.trim();
+
+
     });
   }
   String val = "";
@@ -554,10 +463,11 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             thirdButtonColortext = Color(0xFF4B39EF);
                             // dataList.add(option1.trim());
                             // dataList1.add(option1.trim());
+                            val = optionList[0];
                           });
                           print('First button pressed ...');
                         },
-                        text: option1,
+                        text: optionList[0],
                         options: FFButtonOptions(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -589,12 +499,12 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             firstButtonColortext = Color(0xFF4B39EF);
                             secondButtonColortext = Colors.white;
                             thirdButtonColortext = Color(0xFF4B39EF);
-                            val = randomLetter3;
+                            val = optionList[1];
 
                           });
                           print('Second button pressed ...');
                         },
-                        text: randomLetter3,
+                        text: optionList[1],
                         options: FFButtonOptions(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -626,12 +536,12 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             secondButtonColortext = Color(0xFF4B39EF);
                             thirdButtonColortext = Colors.white;
                             firstButtonColortext = Color(0xFF4B39EF);
-                            val = randomLetter2;
+                            val = optionList[2];
 
                           });
                           print('Second button pressed ...');
                         },
-                        text: randomLetter2,
+                        text: optionList[2],
                         options: FFButtonOptions(
                           width: MediaQuery.of(context).size.width * 0.18,
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -682,7 +592,7 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
                             TransitionUtils.navigateWithAnimation(
                                 context, SenellenQuizWidget(screen: screen));
                           } else {
-                            await updateSnellenChartData(userEmail, dataList, dataList1);
+                            await saveSnellenChartData(userEmail, dataList, dataList1);
                             TransitionUtils.navigateWithAnimation(context,
                                 ReportWidget(data: dataList, data1: dataList1, chartName: 'Snellen Chart',));
                           }
@@ -723,41 +633,65 @@ class _SenellenQuizWidgetState extends State<SenellenQuizWidget>
     );
   }
 
-  Future<void> updateSnellenChartData(String email, List<String> list1, List<String> list2) async {
+  Future<void> saveSnellenChartData(String email, List<String> list1, List<String> list2) async {
     // Reference to Firestore
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    try {
-      // Query to find the user document by email
-      var querySnapshot = await firestore
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .limit(1)
-          .get();
+    // Creating / referencing the document for the specific user by their email
+    DocumentReference userDocRef = firestore.collection('test').doc(email);
 
-      if (querySnapshot.docs.isEmpty) {
-        print('No user found with that email');
-        return;
-      }
+    // Creating / referencing the sub-collection for the Snellen Chart data
+    CollectionReference snellenChartRef = userDocRef.collection('Snellen Chart');
 
-      // Assuming email is unique and there's only one document
-      DocumentReference userDocRef = querySnapshot.docs.first.reference;
-
-      // Data to update
-      Map<String, dynamic> dataToUpdate = {
-        'Snellen Chart': {
-          'list1': list1,
-          'list2': list2,
-        },
-      };
-
-      // Update the document
-      await userDocRef.update(dataToUpdate);
-      print('Snellen Chart data updated successfully!');
-    } catch (e) {
-      print('Error updating Snellen Chart data: $e');
-    }
+    // Creating a new document in the Snellen Chart collection
+    return snellenChartRef.add({
+      'list1': list1,
+      'list2': list2,
+      'timestamp': FieldValue.serverTimestamp() // Adding a timestamp if needed
+    }).then((docRef) {
+      print('Document added with ID: ${docRef.id}');
+    }).catchError((error) {
+      print('Error adding document: $error');
+    });
   }
+
+
+
+  // Future<void> updateSnellenChartData(String email, List<String> list1, List<String> list2) async {
+  //   // Reference to Firestore
+  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //
+  //   try {
+  //     // Query to find the user document by email
+  //     var querySnapshot = await firestore
+  //         .collection('test')
+  //         .where('email', isEqualTo: email)
+  //         .limit(1)
+  //         .get();
+  //
+  //     if (querySnapshot.docs.isEmpty) {
+  //       print('No user found with that email');
+  //       return;
+  //     }
+  //
+  //     // Assuming email is unique and there's only one document
+  //     DocumentReference userDocRef = querySnapshot.docs.first.reference;
+  //
+  //     // Data to update
+  //     Map<String, dynamic> dataToUpdate = {
+  //       'Snellen Chart': {
+  //         'list1': list1,
+  //         'list2': list2,
+  //       },
+  //     };
+  //
+  //     // Update the document
+  //     await userDocRef.update(dataToUpdate);
+  //     print('Snellen Chart data updated successfully!');
+  //   } catch (e) {
+  //     print('Error updating Snellen Chart data: $e');
+  //   }
+  // }
 
   String number1_func(String option1, int random, int counter) {
     print(random);

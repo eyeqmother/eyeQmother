@@ -45,7 +45,7 @@ android {
         applicationId "com.example.eyeqmother"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 23//flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -66,9 +66,11 @@ flutter {
 }
 
 apply plugin: "com.android.application"
-apply plugin: "com.google.gms.google-services"
+
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation'com.google.firebase:firebase-auth-ktx'
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation("com.google.firebase:firebase-auth")
 }

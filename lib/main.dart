@@ -1,8 +1,11 @@
+import 'package:eyeqmother/Screens/Home.dart';
+import 'package:eyeqmother/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eyeqmother/Screens/login_widget.dart';
 import 'package:eyeqmother/resources/app_images.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,10 +39,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.off(const LoginWidget());
-    });
+  void initState()  {
+    initialize();
     super.initState();
   }
 
@@ -55,5 +56,22 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> initialize() async {
+    bool value = await isUserDataExistsInSharedPreferences();
+    Future.delayed(const Duration(seconds: 3), () {
+      Get.off(value ? HomeWidget() : const LoginWidget());
+    });
+  }
+
+  Future<bool> isUserDataExistsInSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString('email');
+    final phoneNumber = prefs.getString('phoneNumber');
+    if(email!=null){
+      userEmail = email;
+    }
+    return email != null || phoneNumber != null;
   }
 }
