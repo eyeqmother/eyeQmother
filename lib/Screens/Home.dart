@@ -4,7 +4,9 @@ import 'package:eyeqmother/Screens/Far_near.dart';
 import 'package:eyeqmother/Screens/ReportExers.dart';
 import 'package:eyeqmother/Screens/report_home.dart';
 import 'package:eyeqmother/components/customDailogue.dart';
+import 'package:eyeqmother/userData.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/page_transmission.dart';
@@ -150,13 +152,19 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   ),
                                 ),
                               ),
-                              const Text(
-                                'Hello there',
-                                style: TextStyle(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  letterSpacing: 0,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width*0.4,
+                                child: Text(
+                                  'Hello, $userName',
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontFamily: 'Readex Pro',
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    letterSpacing: 0,
+                                  ),
                                 ),
                               ),
                               const Padding(

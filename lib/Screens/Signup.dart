@@ -28,6 +28,7 @@ class SignupWidget extends StatefulWidget {
 class _SignupWidgetState extends State<SignupWidget>
     with TickerProviderStateMixin {
   TextEditingController emailAddressController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   PhoneNumber phoneNumber = PhoneNumber();
@@ -165,7 +166,95 @@ class _SignupWidgetState extends State<SignupWidget>
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
+
+                                  const Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 20, 0, 5),
+                                    child: Text(
+                                      'Name',
+                                      style: TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        letterSpacing: 0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: TextFormField(
+                                        controller: nameController,
+                                        //  focusNode: emailAddressFocusNode,
+                                        autofocus: false,
+                                        autofillHints: [AutofillHints.email],
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Name',
+                                          labelStyle: const TextStyle(
+                                            fontFamily: 'Plus Jakarta Sans',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 16,
+                                            letterSpacing: 0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.black,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFF4B39EF),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFFF5963),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                          ),
+                                          focusedErrorBorder:
+                                          OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFFF5963),
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                          ),
+                                          filled: true,
+                                          fillColor: Color(0xFFF1F4F8),
+                                        ),
+                                        style: const TextStyle(
+                                          fontFamily: 'Plus Jakarta Sans',
+                                          color: Color(0xFF101213),
+                                          fontSize: 16,
+                                          letterSpacing: 0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        minLines: null,
+                                        keyboardType:
+                                        TextInputType.name,
+                                        // validator:
+                                        //     emailAddressControllerValidator
+                                        //     .asValidator(context),
+                                      ),
+                                    ),
+                                  ),
+
+                                  const Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 20, 0, 5),
                                     child: Text(
@@ -525,7 +614,7 @@ class _SignupWidgetState extends State<SignupWidget>
                                                   .isEmpty ||
                                               passwordController.text
                                                   .trim()
-                                                  .isEmpty || finalPhoneNumber.trim().isEmpty) {
+                                                  .isEmpty || finalPhoneNumber.trim().isEmpty || nameController.text.trim().isEmpty ) {
                                             loading = false;
                                             setState(() {});
                                             ScaffoldMessenger.of(context)
@@ -535,12 +624,32 @@ class _SignupWidgetState extends State<SignupWidget>
                                                     'Please fill in all fields.'),
                                               ),
                                             );
+                                          }else if (!isValidEmail(emailAddressController.text)) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Please enter valid email'),
+                                              ),
+                                            );
+                                            loading = false;
+                                            setState(() {});
                                           }else if (passwordController.text.length <6) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
                                                     'Please enter strong password'),
+                                              ),
+                                            );
+                                            loading = false;
+                                            setState(() {});
+                                          }else if (!checkboxValue) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'To continue, you must agree to our Terms and Conditions. Please check the box to proceed.'),
                                               ),
                                             );
                                             loading = false;
@@ -612,6 +721,7 @@ class _SignupWidgetState extends State<SignupWidget>
                                                                     .text,
                                                             phoneNumber:
                                                                 finalPhoneNumber,
+                                                            name: nameController.text,
                                                             password:
                                                                 passwordController
                                                                     .text,
@@ -768,6 +878,16 @@ class _SignupWidgetState extends State<SignupWidget>
       print('Error checking user data: $e');
       return false; // Return false in case of an error
     }
+  }
+
+  bool isValidEmail(String email) {
+    // Regular expression for validating an email address
+    final RegExp emailRegex = RegExp(
+        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    );
+
+    // Returns true if the email matches the regex pattern
+    return emailRegex.hasMatch(email);
   }
 
 

@@ -563,6 +563,7 @@ class _forgetState extends State<forget> with TickerProviderStateMixin {
                                                                         .text,
                                                                 verificationId:
                                                                     verificationId,
+                                                                name: "",
                                                                 type:
                                                                     "forgot-password",
                                                               ));

@@ -8,10 +8,8 @@ import 'package:eyeqmother/Screens/nearFarFocus.dart';
 import 'package:eyeqmother/Screens/palmingExercise.dart';
 import 'package:eyeqmother/Screens/sidewayView.dart';
 import 'package:eyeqmother/Screens/zooming.dart';
-
 import '../components/page_transmission.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
+import '../userData.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -49,14 +47,11 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
               children: [
                 Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        'assets/images/Rectangle.png',
-                        width: MediaQuery.sizeOf(context).width,
-                        height: MediaQuery.sizeOf(context).height * 0.25,
-                        fit: BoxFit.cover,
-                      ),
+                    Image.asset(
+                      'assets/images/Rectangle.png',
+                      width: MediaQuery.sizeOf(context).width,
+                      height: MediaQuery.sizeOf(context).height * 0.4,
+                      fit: BoxFit.cover,
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -68,12 +63,12 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                           children: [
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                  const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Container(
                                 width: 60,
                                 height: 60,
                                 clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                 ),
                                 child: Image.asset(
@@ -82,7 +77,32 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                                 ),
                               ),
                             ),
-                            Padding(
+                            SizedBox(
+                              height: 5,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  fontSize: 20,
+                                  letterSpacing: 0,
+                                  color: Colors.white,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Name: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: userName,
+
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                               child: Text(
@@ -96,8 +116,8 @@ class _RecoveryExersWidgetState extends State<RecoveryExersWidget> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                            const Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 5),
                               child: Text(
                                 'Do these ten exercises regularly to improve \nyour eye sight',
                                 textAlign: TextAlign.center,

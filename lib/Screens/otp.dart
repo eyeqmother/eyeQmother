@@ -24,11 +24,13 @@ import 'otpmodel.dart';
 class OtpWidget extends StatefulWidget {
   const OtpWidget(
       {super.key,
+      required this.name,
       required this.email,
       required this.phoneNumber,
       required this.password,
       required this.verificationId,
       this.type = "register"});
+  final String name;
   final String email;
   final String phoneNumber;
   final String password;
@@ -378,9 +380,9 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
                                     if (credential.user != null) {
                                       print('Signup successful');
                                       userEmail = widget.email;
-
+                                      userName = widget.name;
                                       await storeUserData(widget.email,
-                                          widget.password, widget.phoneNumber);
+                                          widget.password, widget.phoneNumber, widget.name);
                                       // Navigate to OTP widget or other destination
                                       loading = false;
                                       setState(() {});
@@ -481,7 +483,7 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
   }
 
   Future<void> storeUserData(
-      String email, String password, String phoneNumber) async {
+      String email, String password, String phoneNumber, String name) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -492,6 +494,7 @@ class _OtpWidgetState extends State<OtpWidget> with TickerProviderStateMixin {
       await users.add({
         'email': email,
         'password': password,
+        'name': name,
         'phone_number': phoneNumber,
       });
 

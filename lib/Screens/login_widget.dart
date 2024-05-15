@@ -595,6 +595,7 @@ class _LoginWidgetState extends State<LoginWidget>
 
         // Check if the decrypted password matches the provided password
         if (decryptedPassword == password) {
+          userName = userDoc['name'];
           await storeUserDataInSharedPreferences(email, password);
           return true;
         } else {

@@ -93,15 +93,44 @@ class _TestListState extends State<TestList> with TickerProviderStateMixin {
                       alignment: AlignmentDirectional(0, 0),
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
-                        child: Text(
-                          widget.chartName,
-                          style: TextStyle(
-                            fontFamily: 'Readex Pro',
-                            fontSize: 22,
-                            letterSpacing: 0,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                          ),
+                        child: Column(
+                          children: [
+                            Text(
+                              widget.chartName,
+                              style: TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 22,
+                                letterSpacing: 0,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontFamily: 'Readex Pro',
+                                  fontSize: 20,
+                                  letterSpacing: 0,
+                                  color: Colors.white,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Name: ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: userName,
+
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),

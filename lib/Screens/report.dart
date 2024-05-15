@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../components/page_transmission.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
+import '../userData.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -149,14 +150,11 @@ class _ReportWidgetState extends State<ReportWidget>
             children: [
               Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/images/Rectangle.png',
-                      width: MediaQuery.sizeOf(context).width,
-                      height: MediaQuery.sizeOf(context).height * 0.2,
-                      fit: BoxFit.cover,
-                    ),
+                  Image.asset(
+                    'assets/images/Rectangle.png',
+                    width: MediaQuery.sizeOf(context).width,
+                    height: MediaQuery.sizeOf(context).height * 0.3,
+                    fit: BoxFit.cover,
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
@@ -182,17 +180,42 @@ class _ReportWidgetState extends State<ReportWidget>
                               ),
                             ),
                           ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 20,
+                                letterSpacing: 0,
+                                color: Colors.white,
+                              ),
+                              children: [
+                                const TextSpan(
+                                  text: 'Name: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: userName,
+
+                                ),
+                              ],
+                            ),
+                          ),
                           Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+                                const EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
                             child: Text(
                               'Results of ${widget.chartName}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Readex Pro',
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 18,
                                 letterSpacing: 0,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
